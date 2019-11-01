@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import './calendar.css'
-import { thisExpression, throwStatement } from '@babel/types';
 
 class Calendar extends Component {
-
 
 constructor(props) {
   super(props);
@@ -23,13 +21,12 @@ state = {
   today: moment(),
   showMonthPopup: false,
   showYearPopup: false,
-
-  x: this.year
+  selectedDay: null
 }
 
 year = () => this.state.dateContext.format('Y')
 
-month = () => this.state.dateContext.format('MMMMM')
+month = () => this.state.dateContext.format('MMMM')
 
 daysInMonth = () => this.state.dateContext.daysInMonth()
 
@@ -44,7 +41,7 @@ firstDayOfMonth = () => {
 }
 
 setMonth = (month) => {
-  let monthNo = this.month.indexOf(month)
+  let monthNo = this.months.indexOf(month)
   let dateContext = Object.assign({}, this.state.dateContext) // to create a clone in order to avoid mutating the original state
   dateContext = moment(dateContext).set('month', monthNo)
   this.setState({
@@ -62,6 +59,7 @@ SelectList = (props) => {
     return (
       <div key={data}>
         <a href="#" onClick={e => this.onSelectChange(e, data)}>
+          {data}
         </a>
       </div>
     ) 
@@ -87,6 +85,24 @@ MonthNav = () => {
       {this.state.showMonthPopup && <this.SelectList data={this.months} /> /* if the showMonthPopup is true THEN show the select list..*/}
     </span>
   )
+}
+
+nextMonth = () => {
+  let dateContext = Object.assign({}, this.state.dateContext)
+  dateContext = moment(dateContext).add(1, 'month')
+  this.setState({
+    dateContext: dateContext
+  })
+  this.props.onNextMonth && this.props.onNextMonth()
+}
+
+prevMonth = () => {
+  let dateContext = Object.assign({}, this.state.dateContext)
+  dateContext = moment(dateContext).subtract(1, 'month')
+  this.setState({
+    dateContext: dateContext
+  })
+  this.props.onPrevMonth && this.props.onPrevMonth()
 }
 
 showYearEditor = () => {
@@ -121,19 +137,26 @@ YearNav = () => {
   return (
     this.state.showYearNav ? 
     <input 
-    defaultValue={this.year()} 
-    className='editor-year' 
-    ref={yearInput => this.yearInput = yearInput} 
-    onKeyUp={e => this.onKeyUpYear(e)}
-    onChange={e => this.onYearChange(e)}
-    type="number"
-    placeholder="year"
+      defaultValue={this.year()} 
+      className='editor-year' 
+      ref={yearInput => this.yearInput = yearInput} 
+      onKeyUp={e => this.onKeyUpYear(e)}
+      onChange={e => this.onYearChange(e)}
+      type="number"
+      placeholder="year"
     />
     :
     <span className="label-year" onDoubleClick={e => this.showYearEditor()}>
       {this.year()}
     </span>
   )
+}
+
+onDayClick = (e, day) => {
+  this.setState({
+    selectedDay: day
+  })
+  this.props.onDayClick && this.props.onDayClick(e, day)
 }
 
   render() {
@@ -146,15 +169,16 @@ YearNav = () => {
 
     let blanks = [] 
     for (let i = 0; i < this.firstDayOfMonth(); i ++) {
-      blanks.push(<td key={i * 27} className='emptySlot'>{" "}</td>)
+      blanks.push(<td key={i * 27} className='emptySlot'>{""}</td>)
     }
 
     let daysInMonth = []
     for (let d = 1; d <= this.daysInMonth(); d ++ ) {
       let className = (d == this.currentDay() ? "day current-day" : "day")
+      let selectedClass = (d == this.state.selectedDay ? 'selected-day' : "")
       daysInMonth.push(
-      <td key={d} className={className}>
-        <span>{d}</span>
+      <td key={d} className={className + selectedClass}>
+        <span onClick={e => this.onDayClick(e, d)}>{d}</span>
       </td>)
     }
 
@@ -185,16 +209,8 @@ YearNav = () => {
       )
     })
 
-  
-
-    console.log("hello")
-    console.log(this.firstDayOfMonth());
-    console.log(moment().startOf('month'))
-    console.log("hi")
-    console.log(daysInMonth)
-
     return (
-      <div className='calendar-container' style={this.style} onClick={() => console.log("hi")}>
+      <div className='calendar-container' style={this.style}>
 
         <table className='calendar'>
           <thead>
@@ -204,20 +220,18 @@ YearNav = () => {
                 {" "}
                 <this.YearNav/>
               </td>
-              <td colSpan='2' className='navMonth'>
+              <td colSpan='2' className='nav-Month'>
                 <i className='prev fa fa-fw fa-chevron-left' onClick={e => this.prevMonth(e)}></i>
-              </td>
-              <td colSpan='2' className='navMonth'>
                 <i className='prev fa fa-fw fa-chevron-right' onClick={e => this.nextMonth(e)}></i>
               </td>
             </tr>
+            </thead>
             <tbody> 
               <tr>
-              {weekDays}
+                {weekDays}
               </tr>
               {trElems}
             </tbody>
-          </thead>
         </table>
       </div>
     );
