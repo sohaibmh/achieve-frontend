@@ -14,7 +14,7 @@ class Goals extends Component {
     october: {
       first: "green",
       second: "red",
-      third: "green",
+      third: "green", 
       fourth: "null",
       fifth: "red",
       sixth: "green",

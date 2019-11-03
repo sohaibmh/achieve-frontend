@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import './calendar.css'
+import { thisExpression } from '@babel/types';
 
 class Calendar extends Component {
 
@@ -21,7 +22,12 @@ state = {
   today: moment(),
   showMonthPopup: false,
   showYearPopup: false,
-  selectedDay: null
+  selectedDay: null,
+  counter: 0,
+  greens: [],
+  reds: [],
+  colours: [],
+  showColours: false,
 }
 
 year = () => this.state.dateContext.format('Y')
@@ -156,8 +162,48 @@ onDayClick = (e, day) => {
   this.setState({
     selectedDay: day
   })
-  this.props.onDayClick && this.props.onDayClick(e, day)
+  // this.props.onDayClick && this.props.onDayClick(e, day)
+
+  // this.setState({
+  //   counter: this.state.selectedDay == day ? (this.state.counter === 2 ? 0 : this.state.counter +1) : 0
+  // })
+
+  this.setState({
+    showColours: !this.state.showColours
+  })
 }
+
+postEventOnClick = (event) => {
+  event.preventDefault()
+  
+  let objToAdd = event.target.value
+
+  this.setState({
+    colours: [...this.state.colours, objToAdd]
+  })
+  
+  // this.postAttraction(objToAdd)
+  
+  // alert('Event added to your favourites list')
+}
+
+
+
+Colours = () => {
+  return (
+    <form>
+      <label>
+        Satus for {this.state.selectedDay + "-" + this.month() + "-" + this.year()}:
+        <select onChange={this.postEventOnClick}>
+          <option value={this.state.selectedDay + this.month() + this.year() + '-green'}>green</option>
+          <option value={this.state.selectedDay + this.month() + this.year() + '-red'}>red</option>
+        </select>
+      </label>
+    </form>
+  )
+}
+
+
 
   render() {
 
@@ -172,12 +218,25 @@ onDayClick = (e, day) => {
       blanks.push(<td key={i * 27} className='emptySlot'>{""}</td>)
     }
 
+    let a = [3, ]
     let daysInMonth = []
     for (let d = 1; d <= this.daysInMonth(); d ++ ) {
       let className = (d == this.currentDay() ? "day current-day" : "day")
-      let selectedClass = (d == this.state.selectedDay ? 'selected-day' : "")
+      let selectedClass = () => {
+          if (this.state.colours.includes(d + this.month() + this.year() + '-green') ) {
+            a.push(...a, d, 'green') && console.log(a)
+            return ' selected-day-green ' 
+          }
+          else if (this.state.colours.includes(d + this.month() + this.year() + '-red') ) {
+            a.push(...a, d, 'red') && console.log(a)
+            return ' selected-day-red '
+          } 
+          else {
+            return " "
+        }
+      }
       daysInMonth.push(
-      <td key={d} className={className + selectedClass}>
+      <td key={d} className={className + selectedClass()}>
         <span onClick={e => this.onDayClick(e, d)}>{d}</span>
       </td>)
     }
@@ -233,6 +292,7 @@ onDayClick = (e, day) => {
               {trElems}
             </tbody>
         </table>
+        {this.state.showColours ? <this.Colours /> : null}
       </div>
     );
   }
