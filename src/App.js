@@ -6,7 +6,8 @@ import { Route } from 'react-router-dom'
 import { Container, Message } from 'semantic-ui-react'
 import API from './adapters/API'
 import Calendar from './components/Calendar'
-import NewPostForm from './components/NewPostForm';
+import Goals from './components/Goals';
+import Home from './components/Home';
 
 const notFoundMessage = () => <Message negative>NOT FOUND</Message>
 
@@ -41,11 +42,11 @@ class App extends React.Component {
       userID: user.id }, () => this.props.history.push('/'))
   }
 
-                        signup = user => {
-                          this.setState({ 
-                            user: user,
-                            userID: user.id }, () => this.props.history.push('/'))
-                        }
+  signup = user => {
+    this.setState({ 
+      user: user,
+      userID: user.id }, () => this.props.history.push('/'))
+  }
 
   logout = () => {
     API.logout()
@@ -53,9 +54,9 @@ class App extends React.Component {
     this.props.history.push('/login')
   }
 
-                        onDayClick = (e, day) => {
-                        alert(day)
-                      }
+  onDayClick = (e, day) => {
+  alert(day)
+  }
 
   render() {
     return (
@@ -75,9 +76,9 @@ class App extends React.Component {
                     signup={this.signup}
                     login={this.login}
                     logout={this.logout}
-                    userID={this.state.userID}
-                    onDayClick={(e, day) => this.onDayClick(e, day)}
-                    width='302px'
+                    // userID={this.state.userID}
+                    // onDayClick={(e, day) => this.onDayClick(e, day)}
+                    // width='302px'
                     // style={style}
                   />
                 ) : (
@@ -87,11 +88,12 @@ class App extends React.Component {
             />
             
           ))}
-        {/* <Route path="postsnew" render={()=><NewPostForm style={style} width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> */}
+          {this.state.user ? <Route path="/goals" render={()=><Goals width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> : undefined}
+          <Route exact path="/" render={() => <Home/>} /> 
         </Container>
       </div>
     )
-  }1
+  }
 }
 
 export default App

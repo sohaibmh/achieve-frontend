@@ -4,8 +4,7 @@ import API from '../adapters/API'
 import moment from 'moment';
 import './calendar.css'
 
-
-class NewPostForm extends React.Component {
+class Goals extends React.Component {
 
   constructor(props) {
     super(props);
@@ -401,4 +400,4 @@ class NewPostForm extends React.Component {
 
 
 
-export default NewPostForm
+export default Goals

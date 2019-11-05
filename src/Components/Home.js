@@ -5,8 +5,7 @@ const Home = () => {
   return (
     <Segment textAlign="center">
       <Header icon>
-        <Icon circular name="food" />
-        Goals
+        Welcome
       </Header>
     </Segment>
   )
