@@ -55,7 +55,7 @@ class NewPostForm extends React.Component {
                         colours: [...this.state.colours, objToAdd]
                       })
 
-                      this.postCalendar(objToAdd)
+                      API.postCalendar(objToAdd)
                   }
 
                     
@@ -222,14 +222,25 @@ class NewPostForm extends React.Component {
   //   this.postCalendar(objToAdd)
   // }
   
+    // getDates = () => {
+    //   return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
+    //   .then(response => response.json())
+    //   .then(data => this.setState({
+    //       datesFromServer: data.map(data => data.date)
+    //     })
+    //   )   
+    // }
+
+
     getDates = () => {
-      return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
+      return fetch(`http://localhost:3000/api/v1/users`, {method: "GET"})
       .then(response => response.json())
-      .then(data => this.setState({
-          datesFromServer: data.map(data => data.date)
-        })
+      .then(data =>  data.filter(user => user.id === this.props.userID).map(data => this.setState({datesFromServer: data.calendars.map(data => data.date) }) )
+        
       )   
     }
+
+    // user.id === this.props.userID).map(data => data.calendars.map(data => data.date))
   
     getDatesWithID = () => {
       return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
@@ -243,6 +254,7 @@ class NewPostForm extends React.Component {
   postCalendar = (objToAdd) => {   
   
     let data = {
+      user_id: 1,
       date: objToAdd
     }
   
@@ -279,7 +291,6 @@ class NewPostForm extends React.Component {
 
 
   render() {
-
 
     let weekDays = this.weekDaysShort.map(day => {
       return (
@@ -353,7 +364,7 @@ class NewPostForm extends React.Component {
     return (
       
 
-      <div className='calendar-container' style={this.style}>
+      <div className='calendar-container' style={this.style} onClick={() => console.log(this.props.userID)}>
         
       <table className='calendar'>
         <thead>

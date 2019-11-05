@@ -102,14 +102,14 @@ const validateUser = () =>
     })
     .catch(handleError)
 
-const postCalendar = calendar =>
+const postCalendar = date =>
   fetch(POSTS_URL, {
     method: 'POST',
     headers: jsonHeaders(authHeader()),
-    body: JSON.stringify({ calendar })
+    body: JSON.stringify({ "calendar": { date } })
   })
-    // .then(handleServerResponse)
-    // .catch(handleError)
+    .then(handleServerResponse)
+    .catch(handleError)
 
 const logout = () => {
   localStorage.removeItem('token')

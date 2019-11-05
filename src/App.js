@@ -17,7 +17,8 @@ const style = {
 
 class App extends React.Component {
   state = {
-    user: null
+    user: null,
+    userID: 'x',
   }
 
   componentDidMount() {
@@ -26,17 +27,24 @@ class App extends React.Component {
       //   alert(user.errors)
       //   this.props.history.push('/login')
       // } else {
-        this.setState({ user })
+        this.setState({ 
+          user: user,
+          userID: user.id
+         })
     //   }
     })
   }
 
   login = user => {
-    this.setState({ user }, () => this.props.history.push('/'))
+    this.setState({ 
+      user: user,
+      userID: user.id }, () => this.props.history.push('/'))
   }
 
                         signup = user => {
-                          this.setState({ user }, () => this.props.history.push('/'))
+                          this.setState({ 
+                            user: user,
+                            userID: user.id }, () => this.props.history.push('/'))
                         }
 
   logout = () => {
@@ -67,7 +75,10 @@ class App extends React.Component {
                     signup={this.signup}
                     login={this.login}
                     logout={this.logout}
-                    
+                    userID={this.state.userID}
+                    onDayClick={(e, day) => this.onDayClick(e, day)}
+                    width='302px'
+                    // style={style}
                   />
                 ) : (
                   notFoundMessage()
@@ -76,11 +87,11 @@ class App extends React.Component {
             />
             
           ))}
-          <Route path="postsnew" render={()=><NewPostForm style={style} width='302px' onDayClick={(e, day) => this.onDayClick(e, day)}  />}/>
+        {/* <Route path="postsnew" render={()=><NewPostForm style={style} width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> */}
         </Container>
       </div>
     )
-  }
+  }1
 }
 
 export default App
