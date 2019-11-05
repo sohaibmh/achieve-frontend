@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react'
+import { Form } from 'semantic-ui-react'
+import API from '../adapters/API'
 import moment from 'moment';
 import './calendar.css'
-import { thisExpression } from '@babel/types';
 
-class Calendar extends Component {
+
+class NewPostForm extends React.Component {
 
   constructor(props) {
     super(props);
@@ -11,12 +13,7 @@ class Calendar extends Component {
     this.style = props.style || {};
     this.style.width = this.width;
   }
-  
-  weekDays = moment.weekdays()
-  weekDaysShort= moment.weekdaysShort()
-  months = moment.months()
-    
-  
+
   state = { 
     dateContext: moment(),
     today: moment(),
@@ -31,7 +28,44 @@ class Calendar extends Component {
     favouriteAttractions: [],
     datesFromServer: '',
     datesFromServerWithID: '',
+
+    title: '',
+    content: ''
   }
+
+
+  handleInputChange = (key, value) => {
+    this.setState({
+      [key]: value
+    })
+  }
+
+  // submit = e => {
+  //   e.preventDefault()
+  //   API.postPost({ title: this.state.title, content: this.state.content })
+  //   .then(post => this.props.history.push('/posts/' + post.id))
+  // }
+
+                    postEventOnClick = event => {
+                      event.preventDefault()
+
+                      let objToAdd = event.target.value
+
+                      this.setState({
+                        colours: [...this.state.colours, objToAdd]
+                      })
+
+                      this.postCalendar(objToAdd)
+                  }
+
+                    
+                  
+  
+
+  weekDays = moment.weekdays()
+  weekDaysShort= moment.weekdaysShort()
+  months = moment.months()
+    
   
   year = () => this.state.dateContext.format('Y')
   
@@ -176,20 +210,20 @@ class Calendar extends Component {
     })
   }
   
-  postEventOnClick = (event) => {
-    event.preventDefault()
+  // postEventOnClick = (event) => {
+  //   event.preventDefault()
     
-    let objToAdd = event.target.value
+  //   let objToAdd = event.target.value
   
-    this.setState({
-      colours: [...this.state.colours, objToAdd]
-    })
+  //   this.setState({
+  //     colours: [...this.state.colours, objToAdd]
+  //   })
   
-    this.postCalendar(objToAdd)
-  }
+  //   this.postCalendar(objToAdd)
+  // }
   
     getDates = () => {
-      return fetch(`http://localhost:3000/calendars`, {method: "GET"})
+      return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
       .then(response => response.json())
       .then(data => this.setState({
           datesFromServer: data.map(data => data.date)
@@ -198,7 +232,7 @@ class Calendar extends Component {
     }
   
     getDatesWithID = () => {
-      return fetch(`http://localhost:3000/calendars`, {method: "GET"})
+      return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
       .then(response => response.json())
       .then(data => this.setState({
           datesFromServerWithID: data.map(data => data.id + ":" + data.date)
@@ -212,7 +246,7 @@ class Calendar extends Component {
       date: objToAdd
     }
   
-    fetch('http://localhost:3000/calendars', {
+    fetch('http://localhost:3000/api/v1/calendars', {
     method: "POST",
     headers: {"Content-Type": "application/json", Accept: "application/json"},
     body: JSON.stringify(data)
@@ -240,105 +274,120 @@ class Calendar extends Component {
     this.getDates()
     this.getDatesWithID()
   }
-  
-    render() {
-  
-      let weekDays = this.weekDaysShort.map(day => {
-        return (
-          <td key={day} className="week-day">{day}</td>
-        )
-      })
-  
-      let blanks = [] 
-      for (let i = 0; i < this.firstDayOfMonth(); i ++) {
-        blanks.push(<td key={i * 27} className='emptySlot'>{""}</td>)
-      }
-  
-  
-      let daysInMonth = []
-      for (let d = 1; d <= this.daysInMonth(); d ++ ) {
-        let className = (d == this.currentDay() ? "day current-day" : "day")
-        let selectedClass = () => {
-            if (this.state.datesFromServer.includes(d + this.month() + this.year() + '-green') || 
-                this.state.colours.includes(d + this.month() + this.year() + '-green') ) {
-                return ' selected-day-green ' 
-            }
-            else if (this.state.datesFromServer.includes(d + this.month() + this.year() + '-red') || this.state.colours.includes(d + this.month() + this.year() + '-red') ) {
-              return ' selected-day-red '
-            } 
-            else {
-              return " "
-          }
-         
-        // if (this.state.datesFromServer.includes(d + this.month() + this.year() + '-green') && this.state.datesFromServer.includes(d + this.month() + this.year() + '-red'){
-        //    this.state.datesFromServerWithID.map(date => date.split(':')[0])
-        // }
-  
-        // <li>{attraction.split(':')[1]}<button onClick={() => this.props.destroy(attraction.split(':')[0])} >Delete</button></li>
-  
-  
-        }
-        daysInMonth.push(
-        <td key={d} className={className + selectedClass()}>
-          <span onClick={e => this.onDayClick(e, d)}>{d}</span>
-        </td>)
-      }
-  
-      var totalSlots = [...blanks, ...daysInMonth]
-      let rows = []
-      let cells = []
-  
-      totalSlots.forEach((row, i) => {
-        if ((i % 7) !== 0) {
-          cells.push(row)
-        } else {
-          let insertRow = cells.slice()
-          rows.push(insertRow)
-          cells = []
-          cells.push(row)
-        }
-        if (i === totalSlots.length - 1) {
-          let insertRow = cells.slice()
-          rows.push(insertRow)
-        }
-      })
-  
-      let trElems = rows.map((d, i) => {
-        return (
-          <tr key={i*100}>
-            {d}
-          </tr>
-        )
-      })
-  
+
+
+
+
+  render() {
+
+
+    let weekDays = this.weekDaysShort.map(day => {
       return (
-        <div className='calendar-container' style={this.style}>
-  
-          <table className='calendar'>
-            <thead>
-              <tr className='calendar-header'>
-                <td colSpan="5">
-                  <this.MonthNav />
-                  {" "}
-                  <this.YearNav/>
-                </td>
-                <td colSpan='2' className='nav-Month'>
-                  <i className='prev fa fa-fw fa-chevron-left' onClick={e => this.prevMonth(e)}></i>
-                  <i className='prev fa fa-fw fa-chevron-right' onClick={e => this.nextMonth(e)}></i>
-                </td>
-              </tr>
-              </thead>
-              <tbody> 
-                <tr>
-                  {weekDays}
-                </tr>
-                {trElems}
-              </tbody>
-          </table>
-          {this.state.showColours ? <this.Colours /> : null}
-        </div>
-      );
+        <td key={day} className="week-day">{day}</td>
+      )
+    })
+
+    let blanks = [] 
+    for (let i = 0; i < this.firstDayOfMonth(); i ++) {
+      blanks.push(<td key={i * 27} className='emptySlot'>{""}</td>)
     }
+
+
+    let daysInMonth = []
+    for (let d = 1; d <= this.daysInMonth(); d ++ ) {
+      let className = (d == this.currentDay() ? "day current-day" : "day")
+      let selectedClass = () => {
+          if (this.state.datesFromServer.includes(d + this.month() + this.year() + '-green') || 
+              this.state.colours.includes(d + this.month() + this.year() + '-green') ) {
+              return ' selected-day-green ' 
+          }
+          else if (this.state.datesFromServer.includes(d + this.month() + this.year() + '-red') || this.state.colours.includes(d + this.month() + this.year() + '-red') ) {
+            return ' selected-day-red '
+          } 
+          else {
+            return " "
+        }
+       
+      // if (this.state.datesFromServer.includes(d + this.month() + this.year() + '-green') && this.state.datesFromServer.includes(d + this.month() + this.year() + '-red'){
+      //    this.state.datesFromServerWithID.map(date => date.split(':')[0])
+      // }
+
+      // <li>{attraction.split(':')[1]}<button onClick={() => this.props.destroy(attraction.split(':')[0])} >Delete</button></li>
+
+
+      }
+      daysInMonth.push(
+      <td key={d} className={className + selectedClass()}>
+        <span onClick={e => this.onDayClick(e, d)}>{d}</span>
+      </td>)
+    }
+
+    var totalSlots = [...blanks, ...daysInMonth]
+    let rows = []
+    let cells = []
+
+    totalSlots.forEach((row, i) => {
+      if ((i % 7) !== 0) {
+        cells.push(row)
+      } else {
+        let insertRow = cells.slice()
+        rows.push(insertRow)
+        cells = []
+        cells.push(row)
+      }
+      if (i === totalSlots.length - 1) {
+        let insertRow = cells.slice()
+        rows.push(insertRow)
+      }
+    })
+
+    let trElems = rows.map((d, i) => {
+      return (
+        <tr key={i*100}>
+          {d}
+        </tr>
+      )
+    })
+
+
+    return (
+      
+
+      <div className='calendar-container' style={this.style}>
+        
+      <table className='calendar'>
+        <thead>
+          <tr className='calendar-header'>
+            <td colSpan="5">
+              <this.MonthNav />
+              {" "}
+              <this.YearNav/>
+            </td>
+            <td colSpan='2' className='nav-Month'>
+              <i className='prev fa fa-fw fa-chevron-left' onClick={e => this.prevMonth(e)}></i>
+              <i className='prev fa fa-fw fa-chevron-right' onClick={e => this.nextMonth(e)}></i>
+            </td>
+          </tr>
+          </thead>
+          <tbody> 
+            <tr>
+              {weekDays}
+            </tr>
+            {trElems}
+          </tbody>
+      </table>
+      {this.state.showColours ? <this.Colours /> : null}
+
+
+      </div>
+
+
+    )
   }
+}
+
   
-  export default Calendar;
+
+
+
+export default NewPostForm
