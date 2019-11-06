@@ -88,7 +88,9 @@ class App extends React.Component {
             />
             
           ))}
+          <br/><br/>
           {this.state.user ? <Route path="/goals" render={()=><Goals width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> : undefined}
+          {/* {this.state.user ? <Route path="/goals" render={()=><Goals width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> : undefined} */}
           <Route exact path="/" render={() => <Home/>} /> 
         </Container>
       </div>

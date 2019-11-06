@@ -364,7 +364,7 @@ class Goals extends React.Component {
       
 
       <div className='calendar-container' style={this.style} onClick={() => console.log(this.props.userID)}>
-        
+      <h3>Goal: Reading 1 hour everyday</h3>
       <table className='calendar'>
         <thead>
           <tr className='calendar-header'>
