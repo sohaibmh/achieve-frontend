@@ -1,7 +1,7 @@
 const API_ENDPOINT = 'http://localhost:3000/api/v1'
 const POSTS_URL = `${API_ENDPOINT}/calendars`
 const LOGIN_URL = `${API_ENDPOINT}/login`
-                              const SIGNUP_URL = `${API_ENDPOINT}/users`
+const SIGNUP_URL = `${API_ENDPOINT}/users`
 const VALIDATE_URL = `${API_ENDPOINT}/validate`
 
 const jsonHeaders = (more = {}) => ({
@@ -106,7 +106,7 @@ const postCalendar = date =>
   fetch(POSTS_URL, {
     method: 'POST',
     headers: jsonHeaders(authHeader()),
-    body: JSON.stringify({ "calendar": { date } })
+    body: JSON.stringify(date)
   })
     .then(handleServerResponse)
     .catch(handleError)

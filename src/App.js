@@ -5,7 +5,6 @@ import NavBar from './components/NavBar'
 import { Route } from 'react-router-dom'
 import { Container, Message } from 'semantic-ui-react'
 import API from './adapters/API'
-import Calendar from './components/Calendar'
 import Goals from './components/Goals';
 import Home from './components/Home';
 
@@ -19,7 +18,9 @@ const style = {
 class App extends React.Component {
   state = {
     user: null,
-    userID: 'x',
+    userID: '',
+    goals: [],
+    goalIDs: [],
   }
 
   componentDidMount() {
@@ -33,8 +34,26 @@ class App extends React.Component {
           userID: user.id
          })
     //   }
+  
     })
+    this.getGoals()
   }
+
+  getGoals = () => {
+    return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
+    .then(response => response.json())
+    .then(data => this.setState({goals: data.filter(goal => goal).map(data => {return {name: data.name, ID: data.id, calendar: data.calendars.map(calendar => calendar.date)} } )})
+    )   
+  }
+
+  getGoalIDs = () => {
+    return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
+    .then(response => response.json())
+    .then(data => this.setState({goalIDs: data.filter(goal => goal).map(data => data.id)})
+    )   
+  }
+
+  
 
   login = user => {
     this.setState({ 
@@ -89,9 +108,13 @@ class App extends React.Component {
             
           ))}
           <br/><br/>
-          {this.state.user ? <Route path="/goals" render={()=><Goals width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> : undefined}
+          {/* {this.state.user ? <Route path="/goals" render={()=><Goals width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> : undefined} */}
           {/* {this.state.user ? <Route path="/goals" render={()=><Goals width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> : undefined} */}
           <Route exact path="/" render={() => <Home/>} /> 
+
+
+            {this.state.goals.map(goal => <Route path="/goals" render={()=><Goals goalID={goal.ID} goalName={goal.name} goalCalendar={goal.calendar} width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/>  )}
+          
         </Container>
       </div>
     )

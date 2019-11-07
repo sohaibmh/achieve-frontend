@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'semantic-ui-react'
 import API from '../adapters/API'
 import moment from 'moment';
-import './calendar.css'
+import './goals.css'
 
 class Goals extends React.Component {
 
@@ -48,10 +48,10 @@ class Goals extends React.Component {
                     postEventOnClick = event => {
                       event.preventDefault()
 
-                      let objToAdd = event.target.value
+                      let objToAdd = {date: event.target.value, goal_id: this.props.goalID}
 
                       this.setState({
-                        colours: [...this.state.colours, objToAdd]
+                        colours: [...this.state.colours, event.target.value]
                       })
 
                       API.postCalendar(objToAdd)
@@ -231,39 +231,46 @@ class Goals extends React.Component {
     // }
 
 
-    getDates = () => {
-      return fetch(`http://localhost:3000/api/v1/users`, {method: "GET"})
-      .then(response => response.json())
-      .then(data =>  data.filter(user => user.id === this.props.userID).map(data => this.setState({datesFromServer: data.calendars.map(data => data.date) }) )
+    // getDates = () => {
+    //   return fetch(`http://localhost:3000/api/v1/users`, {method: "GET"})
+    //   .then(response => response.json())
+    //   .then(data =>  data.filter(user => user.id === this.props.userID).map(data => this.setState({datesFromServer: data.calendars.map(data => data.date) }) )
         
-      )   
-    }
+    //   )   
+    // }
+
+    // getDatesG = () => {
+    //   return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
+    //   .then(response => response.json())
+    //   .then(data =>  data.filter(goal => goal.id === this.props.userID).map(data => this.setState({title: data}) )
+    //   )   
+    // }
 
     // user.id === this.props.userID).map(data => data.calendars.map(data => data.date))
   
-    getDatesWithID = () => {
-      return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
-      .then(response => response.json())
-      .then(data => this.setState({
-          datesFromServerWithID: data.map(data => data.id + ":" + data.date)
-        })
-      )   
-    }
+    // getDatesWithID = () => {
+    //   return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
+    //   .then(response => response.json())
+    //   .then(data => this.setState({
+    //       datesFromServerWithID: data.map(data => data.id + ":" + data.date)
+    //     })
+    //   )   
+    // }
   
-  postCalendar = (objToAdd) => {   
+  // postCalendar = (objToAdd) => {   
   
-    let data = {
-      user_id: 1,
-      date: objToAdd
-    }
+  //   let data = {
+  //     user_id: 1,
+  //     date: objToAdd
+  //   }
   
-    fetch('http://localhost:3000/api/v1/calendars', {
-    method: "POST",
-    headers: {"Content-Type": "application/json", Accept: "application/json"},
-    body: JSON.stringify(data)
-    }).then(response => response.json())
+  //   fetch('http://localhost:3000/api/v1/calendars', {
+  //   method: "POST",
+  //   headers: {"Content-Type": "application/json", Accept: "application/json"},
+  //   body: JSON.stringify(data)
+  //   }).then(response => response.json())
       
-  }
+  // }
   
   
   Colours = () => {
@@ -282,8 +289,10 @@ class Goals extends React.Component {
   }
   
   componentDidMount() {
-    this.getDates()
-    this.getDatesWithID()
+    // this.getDates()
+    // this.getDatesWithID()
+
+    this.setState({datesFromServer: this.props.goalCalendar})
   }
 
 
@@ -363,8 +372,9 @@ class Goals extends React.Component {
     return (
       
 
-      <div className='calendar-container' style={this.style} onClick={() => console.log(this.props.userID)}>
-      <h3>Goal: Reading 1 hour everyday</h3>
+      <div className='calendar-container' style={this.style} onClick={() => console.log('hi')}>
+        
+      <h3>{this.props.goalName}</h3>
       <table className='calendar'>
         <thead>
           <tr className='calendar-header'>
