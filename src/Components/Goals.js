@@ -345,6 +345,8 @@ class Goals extends React.Component {
 
   render() {
 
+ 
+
   let  data =  {
         labels: ['Goal Met %'], 
         datasets: [
