@@ -1,5 +1,6 @@
 const API_ENDPOINT = 'http://localhost:3000/api/v1'
 const POSTS_URL = `${API_ENDPOINT}/calendars`
+const GOALS_URL = `${API_ENDPOINT}/goals`
 const LOGIN_URL = `${API_ENDPOINT}/login`
 const SIGNUP_URL = `${API_ENDPOINT}/users`
 const VALIDATE_URL = `${API_ENDPOINT}/validate`
@@ -102,6 +103,15 @@ const validateUser = () =>
     })
     .catch(handleError)
 
+  const postGoal = goal =>
+  fetch(GOALS_URL, {
+    method: 'POST',
+    headers: jsonHeaders(authHeader()),
+    body: JSON.stringify(goal)
+  })
+    .then(handleServerResponse)
+    .catch(handleError)
+
 const postCalendar = date =>
   fetch(POSTS_URL, {
     method: 'POST',
@@ -118,8 +128,8 @@ export default {
   getPosts,
   login,
   validateUser,
-  // getPost,
   postCalendar,
+  postGoal,
   logout,
   signup
 }

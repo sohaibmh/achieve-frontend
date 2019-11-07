@@ -42,16 +42,16 @@ class App extends React.Component {
   getGoals = () => {
     return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
     .then(response => response.json())
-    .then(data => this.setState({goals: data.filter(goal => goal).map(data => {return {name: data.name, ID: data.id, calendar: data.calendars.map(calendar => calendar.date)} } )})
+    .then(data => this.setState({goals: data.filter(goal => goal.user.id === this.state.userID).map(data => {return {name: data.name, ID: data.id, calendar: data.calendars.map(calendar => calendar.date)} } )})
     )   
   }
 
-  getGoalIDs = () => {
-    return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
-    .then(response => response.json())
-    .then(data => this.setState({goalIDs: data.filter(goal => goal).map(data => data.id)})
-    )   
-  }
+  // getGoalIDs = () => {
+  //   return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
+  //   .then(response => response.json())
+  //   .then(data => this.setState({goalIDs: data.filter(goal => goal).map(data => data.id)})
+  //   )   
+  // }
 
   
 
@@ -95,7 +95,7 @@ class App extends React.Component {
                     signup={this.signup}
                     login={this.login}
                     logout={this.logout}
-                    // userID={this.state.userID}
+                   
                     // onDayClick={(e, day) => this.onDayClick(e, day)}
                     // width='302px'
                     // style={style}
@@ -110,7 +110,7 @@ class App extends React.Component {
           <br/><br/>
           {/* {this.state.user ? <Route path="/goals" render={()=><Goals width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> : undefined} */}
           {/* {this.state.user ? <Route path="/goals" render={()=><Goals width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/> : undefined} */}
-          <Route exact path="/" render={() => <Home/>} /> 
+          <Route exact path="/" render={() => <Home  userID={this.state.userID}/>} /> 
 
 
             {this.state.goals.map(goal => <Route path="/goals" render={()=><Goals goalID={goal.ID} goalName={goal.name} goalCalendar={goal.calendar} width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/>  )}

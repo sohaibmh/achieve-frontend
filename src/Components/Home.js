@@ -9,15 +9,11 @@ class Home extends React.Component {
 
   postEventOnClick = event => {
     event.preventDefault()
-
     let objToAdd = {
-      user_id: 1,
-      name: event.target.value
+      user_id: this.props.userID,
+      name: this.state.goal
     }
-
-    // API.postCalendar(objToAdd)
-
-    console.log(event.target.value)
+    API.postGoal(objToAdd)
   }
 
   render (){
