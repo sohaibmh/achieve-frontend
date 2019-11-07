@@ -3,6 +3,19 @@ import { Form } from 'semantic-ui-react'
 import API from '../adapters/API'
 import moment from 'moment';
 import './goals.css'
+import {HorizontalBar} from 'react-chartjs-2';
+
+
+
+// data: {
+//   datasets: [{
+//       barPercentage: 0.5,
+//       barThickness: 6,
+//       maxBarThickness: 8,
+//       minBarLength: 2,
+//       data: [10, 20, 30, 40, 50, 60, 70]
+//   }]
+// };
 
 class Goals extends React.Component {
 
@@ -24,12 +37,10 @@ class Goals extends React.Component {
     reds: [],
     colours: [],
     showColours: false,
-    favouriteAttractions: [],
     datesFromServer: '',
-    datesFromServerWithID: '',
-
-    title: '',
-    content: ''
+    totalDaysMarked: 0,
+    totalGreens: 0,
+    totalGreensPercentate: 0,
   }
 
 
@@ -37,6 +48,11 @@ class Goals extends React.Component {
     this.setState({
       [key]: value
     })
+  }
+
+  totalGreensPercentate = () => {
+    let percentage = (this.state.totalGreens * 100) / this.state.totalDaysMarked
+    this.setState({ totalGreensPercentate: percentage })
   }
 
   // submit = e => {
@@ -292,13 +308,57 @@ class Goals extends React.Component {
     // this.getDates()
     // this.getDatesWithID()
 
+    // this.setState({datesFromServer: this.props.goalCalendar})
+    this.setState({
+      totalDaysMarked: this.state.datesFromServer.length,
+      totalGreens: this.state.datesFromServer.filter(string => {return string.match(/green/)}).length
+    })
+    this.totalGreensPercentate()
+  }
+
+  componentWillMount() {
+    // this.getDates()
+    // this.getDatesWithID()
+
     this.setState({datesFromServer: this.props.goalCalendar})
+    this.totalGreensPercentate()
+    // this.setState({totalDaysMarked: this.state.datesFromServer.length})
+  }
+
+  data = () => {
+    return ({
+      labels: ['Goal Met %'], 
+      datasets: [
+        {
+          backgroundColor: 'rgba(129, 160, 253, 1)',
+          borderColor: 'rgb(0,0,255)',
+          borderWidth: 5,
+          // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+          // hoverBorderColor: 'rgba(255,99,132,1)',
+          data: [(this.state.totalGreens * 100) / this.state.totalDaysMarked, 0, 100]
+        }
+      ]
+    })
   }
 
 
 
-
   render() {
+
+  let  data =  {
+        labels: ['Goal Met %'], 
+        datasets: [
+          {
+            backgroundColor: 'rgba(129, 160, 253, 1)',
+            borderColor: 'rgb(0,0,255)',
+            borderWidth: 5,
+            // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            // hoverBorderColor: 'rgba(255,99,132,1)',
+            data: [(this.state.totalGreens * 100) / this.state.totalDaysMarked, 0, 100]
+          }
+        ]
+      }
+    
 
     let weekDays = this.weekDaysShort.map(day => {
       return (
@@ -368,13 +428,35 @@ class Goals extends React.Component {
       )
     })
 
+ 
+
+    // const datad = (canvas) => {
+    //   const ctx = canvas.getContext("2d")
+    //   const gradient = ctx.createLinearGradient(0,0,100,0);
+      
+
+    //   return {
+
+    //     backgroundColor: gradient,
+    //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    //     datasets: [{
+    //         label: 'My First dataset',
+    //         display: false,
+    //         backgroundColor: 'rgb(255, 99, 132)',
+    //         borderColor: 'rgb(255, 99, 132)',
+    //         data: [0, 10, 5, 2, 20, 30, 45],
+    //     }]
+
+    //   }
+    // }
+
 
     return (
       
-
-      <div className='calendar-container' style={this.style} onClick={() => console.log('hi')}>
+      <div>
+      <div className='calendar-container' style={this.style} onClick={() => console.log(this.state.totalGreensPercentate )}>
         
-      <h3>{this.props.goalName}</h3>
+      <h3>{this.props.goalName}</h3>  
       <table className='calendar'>
         <thead>
           <tr className='calendar-header'>
@@ -397,16 +479,16 @@ class Goals extends React.Component {
           </tbody>
       </table>
       {this.state.showColours ? <this.Colours /> : null}
-
-
+      <HorizontalBar data={data} options={{legend: {display: false}, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
       </div>
 
+      </div>
 
     )
   }
 }
 
-  
+
 
 
 

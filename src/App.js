@@ -8,6 +8,7 @@ import API from './adapters/API'
 import Goals from './components/Goals';
 import Home from './components/Home';
 
+
 const notFoundMessage = () => <Message negative>NOT FOUND</Message>
 
 const style = {
@@ -20,7 +21,6 @@ class App extends React.Component {
     user: null,
     userID: '',
     goals: [],
-    goalIDs: [],
   }
 
   componentDidMount() {
@@ -80,7 +80,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <NavBar routes={routes} user={this.state.user} />
+        <NavBar routes={routes} user={this.state.user}/>
         <Container>
         
           {routes.map(route => (
