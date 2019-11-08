@@ -16,9 +16,16 @@ class LoginForm extends React.Component {
 
   submit = e => {
     e.preventDefault()
-    API.login({ email: this.state.email, password: this.state.password }).then(
-      user => this.props.login(user)
-    )
+    API.login({ email: this.state.email, password: this.state.password }).then(data => {
+      if (data.error) {
+        throw Error(data.error)
+      } else {
+        this.props.login(data)
+      }
+    })
+    .catch(error => {
+      alert('not recognised')
+    })
   }
 
   render() {

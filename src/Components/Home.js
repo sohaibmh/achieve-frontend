@@ -16,6 +16,18 @@ class Home extends React.Component {
     API.postGoal(objToAdd)
   }
 
+  CreateGoal = () => {
+    return (
+      <div>
+        <h3>Create a goal</h3>
+        <Form onSubmit={this.postEventOnClick} onChange={event => this.setState({goal: event.target.value})}>
+          <Form.Input name="goal" type="goal" placeholder="Goal" autocomplete="goal" />
+          <Form.Button>Submit</Form.Button>
+        </Form>
+      </div>
+    )
+  }
+
   render (){
   return (
     <Segment textAlign="center">
@@ -23,11 +35,8 @@ class Home extends React.Component {
         <h2>Welcome</h2>
       </Header>
       <br/><br/><br/>
-      <h3>Create a goal</h3>
-      <Form onSubmit={this.postEventOnClick} onChange={event => this.setState({goal: event.target.value})}>
-        <Form.Input name="goal" type="goal" placeholder="Goal" autocomplete="goal" />
-        <Form.Button>Submit</Form.Button>
-      </Form>
+      {this.props.user === false ? "Login or Sign up" : this.CreateGoal()}
+      <br/><br/><br/>   
     </Segment>
   )
   }
