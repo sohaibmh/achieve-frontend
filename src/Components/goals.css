@@ -114,3 +114,8 @@ tr {
 .label-month {
     cursor: pointer;
 }
+
+#horizontalBar {
+  /* width: 20rem; */
+  height: 75px;
+}

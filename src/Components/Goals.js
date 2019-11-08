@@ -325,21 +325,21 @@ class Goals extends React.Component {
     // this.setState({totalDaysMarked: this.state.datesFromServer.length})
   }
 
-  data = () => {
-    return ({
-      labels: ['Goal Met %'], 
-      datasets: [
-        {
-          backgroundColor: 'rgba(129, 160, 253, 1)',
-          borderColor: 'rgb(0,0,255)',
-          borderWidth: 5,
-          // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-          // hoverBorderColor: 'rgba(255,99,132,1)',
-          data: [(this.state.totalGreens * 100) / this.state.totalDaysMarked, 0, 100]
-        }
-      ]
-    })
-  }
+  // data = () => {
+  //   return ({
+  //     labels: ['Goal Met %'], 
+  //     datasets: [
+  //       {
+  //         backgroundColor: 'rgba(129, 160, 253, 1)',
+  //         borderColor: 'rgb(0,0,255)',
+  //         borderWidth: 5,
+  //         // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+  //         // hoverBorderColor: 'rgba(255,99,132,1)',
+  //         data: [(this.state.totalGreens * 100) / this.state.totalDaysMarked, 0, 100]
+  //       }
+  //     ]
+  //   })
+  // }
 
 
 
@@ -354,6 +354,7 @@ class Goals extends React.Component {
             backgroundColor: 'rgba(129, 160, 253, 1)',
             borderColor: 'rgb(0,0,255)',
             borderWidth: 5,
+            barPercentage: 20,
             // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
             // hoverBorderColor: 'rgba(255,99,132,1)',
             data: [(this.state.totalGreens * 100) / this.state.totalDaysMarked, 0, 100]
@@ -481,7 +482,9 @@ class Goals extends React.Component {
           </tbody>
       </table>
       {this.state.showColours ? <this.Colours /> : null}
-      <HorizontalBar data={data} options={{legend: {display: false}, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
+        <div id={'horizontalBar'}>
+          <HorizontalBar data={data} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
+        </div>
       </div>
 
       </div>
