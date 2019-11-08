@@ -9,6 +9,7 @@ tr {
 
 .calendar-container {
     border: 2px solid skyblue;
+    margin: 50px;
 }
 
 .calendar {
@@ -58,13 +59,23 @@ tr {
     border-radius: 2%;
     color: white;
 }
-.selected-day {
-    background-color:yellow;
+
+.selected-day-green {
+    background-color: green;
     width: 28px;
     height: 28px;
     line-height: 28px;
     border-radius: 2%;
     color: black;
+}
+
+.selected-day-red {
+  background-color:red;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 2%;
+  color: black;
 }
 
 .month-popup {
