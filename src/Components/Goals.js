@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Card, Icon  } from 'semantic-ui-react'
+import { Button, Dropdown, Menu, Select } from 'semantic-ui-react'
 import API from '../adapters/API'
 import moment from 'moment';
 import './goals.css'
@@ -55,6 +55,17 @@ class Goals extends React.Component {
     this.setState({ totalGreensPercentate: percentage })
   }
 
+
+
+
+  // countryOptions = [
+  //   { key: 'af', value: 'af', text: 'Afghanistan' },
+  //   { key: 'ax', value: 'ax', text: 'Aland Islands' },
+  //   { key: 'al', value: 'al', text: 'Albania' },
+  // ]
+  
+  
+
   // submit = e => {
   //   e.preventDefault()
   //   API.postPost({ title: this.state.title, content: this.state.content })
@@ -68,6 +79,10 @@ class Goals extends React.Component {
 
                       this.setState({
                         colours: [...this.state.colours, event.target.value]
+                      })
+
+                      this.setState({
+                        showColours: !this.state.showColours
                       })
 
                       API.postCalendar(objToAdd)
@@ -214,12 +229,7 @@ class Goals extends React.Component {
     this.setState({
       selectedDay: day
     })
-    // this.props.onDayClick && this.props.onDayClick(e, day)
-  
-    // this.setState({
-    //   counter: this.state.selectedDay == day ? (this.state.counter === 2 ? 0 : this.state.counter +1) : 0
-    // })
-  
+
     this.setState({
       showColours: !this.state.showColours
     })
@@ -291,11 +301,12 @@ class Goals extends React.Component {
   
   Colours = () => {
     return (
-      <form>
+      <form id='statusForm'>
         <label>
          <button><h4>Satus for {this.state.selectedDay + "-" + this.month() + "-" + this.year()}</h4></button>
-          <select onChange={this.postEventOnClick}>
-            <option value={this.state.selectedDay + this.month() + this.year() + '-default'}>Default</option>
+         <br/>
+          <select onChange={this.postEventOnClick} class="ui fluid selection dropdown">
+            <option value={this.state.selectedDay + this.month() + this.year() + '-default'}>Select</option>
             <option value={this.state.selectedDay + this.month() + this.year() + '-green'}>Achieved</option>
             <option value={this.state.selectedDay + this.month() + this.year() + '-red'}>Not Achieved</option>
           </select>
@@ -303,6 +314,8 @@ class Goals extends React.Component {
       </form>
     )
   }
+
+
   
   componentDidMount() {
     // this.getDates()
@@ -351,9 +364,6 @@ class Goals extends React.Component {
       borderColor = 'rgba(250, 212, 0, 1)'
     }
     
-
-    
-
     return ({
       labels: ['Goal Met %'], 
       datasets: [
@@ -373,6 +383,12 @@ class Goals extends React.Component {
 
   render() {
 
+
+
+
+
+
+
  
 
   let  data = 
@@ -382,7 +398,7 @@ class Goals extends React.Component {
         datasets: [
           {
             backgroundColor: 'rgba(129, 160, 253, 1)',
-            borderColor: 'rgb(0,0,255)',
+            borderColor: 'rgb(0,0,255)',      
             borderWidth: 5,
             barPercentage: 20,
             // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
@@ -514,6 +530,7 @@ class Goals extends React.Component {
             {trElems}
           </tbody>
       </table>
+      <br/>
       {this.state.showColours ? <this.Colours /> : null}
        
           </div>
@@ -526,17 +543,10 @@ class Goals extends React.Component {
         </div>
       </div>
       
-      
       </div>
-
-
 
     )
   }
 }
-
-
-
-
 
 export default Goals

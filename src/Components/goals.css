@@ -120,6 +120,12 @@ tr {
 }
 
 #horizontalBar {
-  /* width: 20rem; */
   height: 75px;
+}
+
+#statusForm {
+  border: 2px solid gainsboro;
+  background-color: gainsboro;
+  align-self: center;
+  align-items: center
 }
