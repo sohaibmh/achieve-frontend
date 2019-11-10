@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form } from 'semantic-ui-react'
+import { Form, Card, Icon  } from 'semantic-ui-react'
 import API from '../adapters/API'
 import moment from 'moment';
 import './goals.css'
@@ -314,32 +314,60 @@ class Goals extends React.Component {
       totalGreens: this.state.datesFromServer.filter(string => {return string.match(/green/)}).length
     })
     this.totalGreensPercentate()
+
   }
 
   componentWillMount() {
-    // this.getDates()
+    // this.getDates() 
     // this.getDatesWithID()
+    
 
     this.setState({datesFromServer: this.props.goalCalendar})
     this.totalGreensPercentate()
+    this.data()
     // this.setState({totalDaysMarked: this.state.datesFromServer.length})
   }
 
-  // data = () => {
-  //   return ({
-  //     labels: ['Goal Met %'], 
-  //     datasets: [
-  //       {
-  //         backgroundColor: 'rgba(129, 160, 253, 1)',
-  //         borderColor: 'rgb(0,0,255)',
-  //         borderWidth: 5,
-  //         // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-  //         // hoverBorderColor: 'rgba(255,99,132,1)',
-  //         data: [(this.state.totalGreens * 100) / this.state.totalDaysMarked, 0, 100]
-  //       }
-  //     ]
-  //   })
-  // }
+  data = () => {
+
+    let dataPercentage = (this.state.totalGreens * 100) / this.state.totalDaysMarked
+    let backgroundColor = ''
+    let borderColor = ''
+
+    if (dataPercentage < 40) {
+      backgroundColor = 'rgba(242, 58, 58, 0.58)'
+      borderColor = 'rgba(242, 58, 58, 1)'
+    }
+    else if (dataPercentage >= 40 && dataPercentage < 70) {
+      backgroundColor = 'rgba(129, 160, 253, 1)'
+      borderColor = 'rgb(0,0,255)'
+    }
+    else if (dataPercentage >= 70 && dataPercentage < 90 ) {
+      backgroundColor = 'rgba(94, 242, 54, 0.58)'
+      borderColor = 'rgba(45, 168, 11, 1)'
+    }
+    else if (dataPercentage >= 90 && dataPercentage <= 100) {
+      backgroundColor = 'rgba(255, 217, 0, 0.6)'
+      borderColor = 'rgba(250, 212, 0, 1)'
+    }
+    
+
+    
+
+    return ({
+      labels: ['Goal Met %'], 
+      datasets: [
+        {
+          backgroundColor: backgroundColor,
+          borderColor: borderColor,
+          borderWidth: 5,
+          // hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+          // hoverBorderColor: 'rgba(255,99,132,1)',
+          data: [dataPercentage, 0, 100]
+        }
+      ]
+    })
+  }
 
 
 
@@ -347,7 +375,9 @@ class Goals extends React.Component {
 
  
 
-  let  data =  {
+  let  data = 
+
+      {
         labels: ['Goal Met %'], 
         datasets: [
           {
@@ -456,11 +486,14 @@ class Goals extends React.Component {
 
     return (
       
-      <div>
+
       <div className='calendar-container' style={this.style} onClick={() => console.log(this.state.totalGreensPercentate )}>
-        
-      <h3>{this.props.goalName}</h3>  
-      <table className='calendar'>
+
+      <div class="ui card">
+        <div class="content"><div class="header">{this.props.goalName}</div></div>
+        <div class="content">
+          <div class="description">
+          <table className='calendar'>
         <thead>
           <tr className='calendar-header'>
             <td colSpan="5">
@@ -482,12 +515,21 @@ class Goals extends React.Component {
           </tbody>
       </table>
       {this.state.showColours ? <this.Colours /> : null}
-        <div id={'horizontalBar'}>
-          <HorizontalBar data={data} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
+       
+          </div>
+        </div>
+        <div class="extra content">
+          <i aria-hidden="true"></i>
+          <div id={'horizontalBar'}>
+          <HorizontalBar data={this.data()} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
+        </div>
         </div>
       </div>
-
+      
+      
       </div>
+
+
 
     )
   }

@@ -31,14 +31,12 @@ class SignUpForm extends Component {
           name="email"
           type="email"
           placeholder="email"
-          autocomplete="email"
           value={this.state.email}
         />
         <Form.Input
           name="password"
           type="password"
           placeholder="password"
-          autocomplete="password"
           value={this.state.password}
         />
         <Form.Button>Submit</Form.Button>
