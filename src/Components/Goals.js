@@ -41,6 +41,7 @@ class Goals extends React.Component {
     totalDaysMarked: 0,
     totalGreens: 0,
     totalGreensPercentate: 0,
+    showGoalDetails: false
   }
 
 
@@ -506,8 +507,10 @@ class Goals extends React.Component {
       <div className='calendar-container' style={this.style} onClick={() => console.log(this.state.totalGreensPercentate )}>
 
       <div class="ui card">
-        <div class="content"><div class="header">{this.props.goalName}</div></div>
-        <div class="content">
+        <div class="content"><div class="header" onClick={() => this.setState({showGoalDetails: !this.state.showGoalDetails})}>{this.props.goalName}</div></div>
+
+        {this.state.showGoalDetails ? <div class="content">
+          <div>
           <div class="description">
           <table className='calendar'>
         <thead>
@@ -541,8 +544,11 @@ class Goals extends React.Component {
           <HorizontalBar data={this.data()} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
         </div>
         </div>
-      </div>
-      
+        </div>
+      :
+      null}
+        
+        </div>
       </div>
 
     )
