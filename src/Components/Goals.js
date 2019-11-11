@@ -37,11 +37,14 @@ class Goals extends React.Component {
     reds: [],
     colours: [],
     showColours: false,
-    datesFromServer: '',
+    datesFromServer: [],
+    datesWithID: [],
+    datesWithoutStatus: [],
     totalDaysMarked: 0,
     totalGreens: 0,
     totalGreensPercentate: 0,
-    showGoalDetails: false
+    showGoalDetails: false,
+    datesFromServerTesting: [],
   }
 
 
@@ -79,19 +82,23 @@ class Goals extends React.Component {
                       let objToAdd = {date: event.target.value, goal_id: this.props.goalID}
 
                       this.setState({
-                        colours: [...this.state.colours, event.target.value]
-                      })
-
-                      this.setState({
                         showColours: !this.state.showColours
                       })
 
-                      API.postCalendar(objToAdd)
-                  }
+                      if (!this.state.datesFromServer.includes(event.target.value)) {
+                        API.postCalendar(objToAdd).then(date => this.setState({datesWithID: date.goal.calendars.map(x => x.id + ":" + x.date) })) /* post and get */
+                        this.setState({
+                          colours: [...this.state.colours, event.target.value],
+                        })
+                      }
+                      
+                      this.setState({
+                        datesFromServer: this.props.goalCalendar,
+                        datesWithID: this.props.goalDatesWithID,
+                      })
+                    }
 
                     
-                  
-  
 
   weekDays = moment.weekdays()
   weekDaysShort= moment.weekdaysShort()
@@ -279,7 +286,7 @@ class Goals extends React.Component {
     //   return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
     //   .then(response => response.json())
     //   .then(data => this.setState({
-    //       datesFromServerWithID: data.map(data => data.id + ":" + data.date)
+    //       datesWithID: data.map(data => data.id + ":" + data.date)
     //     })
     //   )   
     // }
@@ -325,18 +332,31 @@ class Goals extends React.Component {
     // this.setState({datesFromServer: this.props.goalCalendar})
     this.setState({
       totalDaysMarked: this.state.datesFromServer.length,
-      totalGreens: this.state.datesFromServer.filter(string => {return string.match(/green/)}).length
+      totalGreens: this.state.datesFromServer.filter(date => {return date.match(/green/)}).length,
+      datesWithoutStatus: this.state.datesFromServer.map(date => date.split("-")).flat().filter((x, i) => i % 2 == 0)
+
     })
     this.totalGreensPercentate()
 
   }
 
+  datesWithID = () => {
+    let id = []
+    id.push(this.state.datesWithID.filter(date => {return date.match(   this.state.selectedDay + this.month() + this.year()   )}).map(date => date.split(":")).flat())
+    return id[0][0]
+  }
+
+  
   componentWillMount() {
     // this.getDates() 
     // this.getDatesWithID()
-    
+  
 
-    this.setState({datesFromServer: this.props.goalCalendar})
+    this.setState({
+      datesFromServer: this.props.goalCalendar,
+      // datesWithID: this.props.goalDatesWithID
+    })
+
     this.totalGreensPercentate()
     this.data()
     // this.setState({totalDaysMarked: this.state.datesFromServer.length})
@@ -504,7 +524,7 @@ class Goals extends React.Component {
     return (
       
 
-      <div className='calendar-container' style={this.style} onClick={() => console.log(this.state.totalGreensPercentate )}>
+      <div className='calendar-container' style={this.style} onClick={() => console.log(this.datesWithID() )}>
 
       <div class="ui card">
         <div class="content"><div class="header" onClick={() => this.setState({showGoalDetails: !this.state.showGoalDetails})}>{this.props.goalName}</div></div>
