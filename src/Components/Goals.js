@@ -45,6 +45,9 @@ class Goals extends React.Component {
     totalGreensPercentate: 0,
     showGoalDetails: false,
     datesFromServerTesting: [],
+    showChangeGoalInput: true,
+    showEditGoal: false,
+    goalDeleted: false,
   }
 
 
@@ -80,16 +83,21 @@ class Goals extends React.Component {
                       event.preventDefault()
 
                       let objToAdd = {date: event.target.value, goal_id: this.props.goalID}
+                      let objToUpdate = {date: event.target.value, goal_id: this.props.goalID}
 
                       this.setState({
                         showColours: !this.state.showColours
                       })
 
                       if (!this.state.datesFromServer.includes(event.target.value)) {
-                        API.postCalendar(objToAdd).then(date => this.setState({datesWithID: date.goal.calendars.map(x => x.id + ":" + x.date) })) /* post and get */
+                        API.postCalendar(objToAdd) /*.then(date => this.setState({datesWithID: date.goal.calendars.map(x => x.id + ":" + x.date) })) /* post and get */
                         this.setState({
                           colours: [...this.state.colours, event.target.value],
                         })
+                      }
+
+                      if (this.state.datesWithoutStatus.includes(   this.state.selectedDay + this.month() + this.year()   )){
+                        API.updateCalendar(this.dateID(), objToUpdate)
                       }
                       
                       this.setState({
@@ -232,6 +240,58 @@ class Goals extends React.Component {
       </span>
     )
   }
+
+  changeGoalNameHandler = (e) => {
+    // e.preventDefault()
+    let objToUpdate = {
+      user_id: this.props.userID,
+      name: this.refs.newGoalName.value
+    }
+
+    API.updateGoal(this.props.goalID, objToUpdate)
+    this.setState({showChangeGoalInput: !this.state.showChangeGoalInput})
+    this.props.getGoals()
+  }
+
+  editGoalHandler = e => {
+    e.preventDefault()
+
+    if (e.target.value == 'rename') {
+      this.setState({showChangeGoalInput: !this.state.showChangeGoalInput})
+    }
+    else if (e.target.value == 'delete') {
+      API.deleteGoal(this.props.goalID)
+      this.setState({goalDeleted: !this.state.goalDeleted})
+    }
+  }
+
+  editGoal = () => {
+    return (
+    <form>
+      <label>
+        <select onChange={this.editGoalHandler} class="ui fluid selection dropdown">
+          <option value={'rename'}>Select</option>
+          <option value={'rename'}>Rename</option>
+          <option value={'delete'}>Delete</option>
+        </select>
+      </label>
+    </form>
+    )
+  }
+
+  ChangeGoalName = () => {
+    return (
+        <form onSubmit={this.changeGoalNameHandler}>
+          <input 
+          defaultValue={this.props.goalName} 
+          onChange={e => this.onYearChange(e)}
+          onKeyPress={this.handleKeyPress}
+          placeholder="New goal name"
+          ref='newGoalName'
+          />
+        </form>
+    )
+  }
   
   onDayClick = (e, day) => {
     this.setState({
@@ -309,7 +369,7 @@ class Goals extends React.Component {
   
   Colours = () => {
     return (
-      <form id='statusForm'>
+      <form id='statusForm' onClick={() => this.dateID()}>
         <label>
          <button><h4>Satus for {this.state.selectedDay + "-" + this.month() + "-" + this.year()}</h4></button>
          <br/>
@@ -334,18 +394,16 @@ class Goals extends React.Component {
       totalDaysMarked: this.state.datesFromServer.length,
       totalGreens: this.state.datesFromServer.filter(date => {return date.match(/green/)}).length,
       datesWithoutStatus: this.state.datesFromServer.map(date => date.split("-")).flat().filter((x, i) => i % 2 == 0)
-
     })
     this.totalGreensPercentate()
-
   }
 
-  datesWithID = () => {
+  dateID = () => {
     let id = []
     id.push(this.state.datesWithID.filter(date => {return date.match(   this.state.selectedDay + this.month() + this.year()   )}).map(date => date.split(":")).flat())
-    return id[0][0]
+    // return id[0][0]
+    console.log(id[0][0])
   }
-
   
   componentWillMount() {
     // this.getDates() 
@@ -354,7 +412,7 @@ class Goals extends React.Component {
 
     this.setState({
       datesFromServer: this.props.goalCalendar,
-      // datesWithID: this.props.goalDatesWithID
+      datesWithID: this.props.goalDatesWithID
     })
 
     this.totalGreensPercentate()
@@ -523,52 +581,54 @@ class Goals extends React.Component {
 
     return (
       
+    <div> {this.state.goalDeleted ? null : <div className='calendar-container' style={this.style} >
 
-      <div className='calendar-container' style={this.style} onClick={() => console.log(this.datesWithID() )}>
+    <div class="ui card">
+      <div class="content"><div class="header">{this.state.showChangeGoalInput ? <span onClick={() => this.setState({showGoalDetails: !this.state.showGoalDetails})}> {this.props.goalName }</span> : this.ChangeGoalName()} <button id='goalEdit' onClick={() => this.setState({showEditGoal: !this.state.showEditGoal})}>:::</button> {this.state.showEditGoal ? this.editGoal() : null}  </div></div>
 
-      <div class="ui card">
-        <div class="content"><div class="header" onClick={() => this.setState({showGoalDetails: !this.state.showGoalDetails})}>{this.props.goalName}</div></div>
-
-        {this.state.showGoalDetails ? <div class="content">
-          <div>
-          <div class="description">
-          <table className='calendar'>
-        <thead>
-          <tr className='calendar-header'>
-            <td colSpan="5">
-              <this.MonthNav />
-              {" "}
-              <this.YearNav/>
-            </td>
-            <td colSpan='2' className='nav-Month'>
-              <i className='prev fa fa-fw fa-chevron-left' onClick={e => this.prevMonth(e)}></i>
-              <i className='prev fa fa-fw fa-chevron-right' onClick={e => this.nextMonth(e)}></i>
-            </td>
+      {this.state.showGoalDetails ? <div class="content">
+        <div>
+        <div class="description">
+        <table className='calendar'>
+      <thead>
+        <tr className='calendar-header'>
+          <td colSpan="5">
+            <this.MonthNav />
+            {" "}
+            <this.YearNav/>
+          </td>
+          <td colSpan='2' className='nav-Month'>
+            <i className='prev fa fa-fw fa-chevron-left' onClick={e => this.prevMonth(e)}></i>
+            <i className='prev fa fa-fw fa-chevron-right' onClick={e => this.nextMonth(e)}></i>
+          </td>
+        </tr>
+        </thead>
+        <tbody> 
+          <tr>
+            {weekDays}
           </tr>
-          </thead>
-          <tbody> 
-            <tr>
-              {weekDays}
-            </tr>
-            {trElems}
-          </tbody>
-      </table>
-      <br/>
-      {this.state.showColours ? <this.Colours /> : null}
-       
-          </div>
+          {trElems}
+        </tbody>
+    </table>
+    <br/>
+    {this.state.showColours ? <this.Colours  /> : null}
+     
         </div>
-        <div class="extra content">
-          <i aria-hidden="true"></i>
-          <div id={'horizontalBar'}>
-          <HorizontalBar data={this.data()} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
-        </div>
-        </div>
-        </div>
-      :
-      null}
-        
-        </div>
+      </div>
+      <div class="extra content">
+        <i aria-hidden="true"></i>
+        <div id={'horizontalBar'}>
+        <HorizontalBar data={this.data()} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
+      </div>
+      </div>
+      </div>
+    :
+    null}
+      
+      </div>
+      
+    </div>}
+      
       </div>
 
     )

@@ -112,6 +112,22 @@ const validateUser = () =>
     .then(handleServerResponse)
     .catch(handleError)
 
+const updateGoal = (id, goal) =>
+fetch(`${GOALS_URL}/${id}`, {
+  method: 'PATCH',
+  headers: jsonHeaders(authHeader()),
+  body: JSON.stringify(goal)
+})
+  .then(handleServerResponse)
+  .catch(handleError)
+
+const deleteGoal = id =>
+fetch(`${GOALS_URL}/${id}`, {
+method: 'DELETE',
+})
+.then(handleServerResponse)
+.catch(handleError)
+
 const postCalendar = date =>
   fetch(POSTS_URL, {
     method: 'POST',
@@ -121,6 +137,15 @@ const postCalendar = date =>
     .then(handleServerResponse)
     .catch(handleError)
 
+const updateCalendar = (id, date) =>
+fetch(`${POSTS_URL}/${id}`, {
+  method: 'PATCH',
+  headers: jsonHeaders(authHeader()),
+  body: JSON.stringify(date)
+})
+  .then(handleServerResponse)
+  .catch(handleError)
+
 const logout = () => {
   localStorage.removeItem('token')
 }
@@ -129,7 +154,10 @@ export default {
   login,
   validateUser,
   postCalendar,
+  updateCalendar,
   postGoal,
+  deleteGoal,
+  updateGoal,
   logout,
   signup
 }

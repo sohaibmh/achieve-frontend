@@ -15,7 +15,7 @@ class Home extends React.Component {
     }
     API.postGoal(objToAdd)
   }
-
+  
   CreateGoal = () => {
     return (
       <div>
@@ -30,6 +30,7 @@ class Home extends React.Component {
 
   render (){
   return (
+    <div>
     <Segment textAlign="center">
       <Header icon>
         <h2>Welcome</h2>
@@ -37,7 +38,11 @@ class Home extends React.Component {
       <br/><br/><br/>
       {this.props.user === false ? "Login or Sign up" : this.CreateGoal()}
       <br/><br/><br/>   
+      
     </Segment>
+
+    
+    </div>
   )
   }
 }

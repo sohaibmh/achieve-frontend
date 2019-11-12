@@ -57,6 +57,10 @@ class App extends React.Component {
     )   
   }
 
+  getGoalss = () => {
+    console.log('hi')
+  }
+
   // getGoalsWithID = () => {
   //   return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
   //   .then(response => response.json())
@@ -108,8 +112,11 @@ class App extends React.Component {
           <Route exact path="/login" render={() => <LoginForm  login={this.login}/>} /> 
           <Route exact path="/signup" render={() => <SignUpForm  signup={this.signup}/>} /> 
           <Route exact path="/logout" render={() => {this.logout()}} /> 
-          {this.state.goals.map(goal => <Route path="/goals" render={()=><Goals goalID={goal.ID} goalName={goal.name} goalCalendar={goal.calendar} goalDatesWithID={goal.calendarWithID} width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />}/>  )}
+          {this.state.goals.map(goal => <Route path="/goals" render={()=><Goals getGoals={this.getGoals} goalID={goal.ID} goalName={goal.name} goalCalendar={goal.calendar} goalDatesWithID={goal.calendarWithID} width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />} />  )}
         </Container>
+        
+        
+        
       </div>
     )
   }
