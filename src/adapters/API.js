@@ -61,30 +61,13 @@ const login = userDetails =>
     })
     .catch(handleError)
 
-
-
-                      const signup = userDetails =>
-                        fetch(SIGNUP_URL, {
-                          method: 'POST',
-                          headers: jsonHeaders(),
-                          body: JSON.stringify({ user: userDetails })
-                        })
-                          .then(response => response.json())
-
-
-                    // postCalendar = (objToAdd) => {   
-                  
-                    //   let data = {
-                    //     date: objToAdd
-                    //   }
-                    
-                    //   fetch('http://localhost:3000/calendars', {
-                    //   method: "POST",
-                    //   headers: {"Content-Type": "application/json", Accept: "application/json"},
-                    //   body: JSON.stringify(data)
-                    //   }).then(response => response.json())
-                        
-                    // }   
+  const signup = userDetails =>
+    fetch(SIGNUP_URL, {
+      method: 'POST',
+      headers: jsonHeaders(),
+      body: JSON.stringify({ user: userDetails })
+    })
+      .then(response => response.json())
 
 const validateUser = () =>
   fetch(VALIDATE_URL, {

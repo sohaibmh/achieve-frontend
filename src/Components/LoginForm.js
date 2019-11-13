@@ -48,7 +48,7 @@ class LoginForm extends React.Component {
           autocomplete="password"
           value={this.state.password}
         />
-        <Form.Button>Submit</Form.Button>
+        <Form.Button basic color='blue'>Submit</Form.Button>
       </Form>
     )
   }

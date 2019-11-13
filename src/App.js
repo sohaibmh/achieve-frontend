@@ -44,12 +44,6 @@ class App extends React.Component {
   }
 
 
-
-  // shouldComponentUpdate() {
-  //   this.getGoals()
-  // }
-
-
   getGoals = () => {
     return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
     .then(response => response.json())
@@ -60,24 +54,6 @@ class App extends React.Component {
   getGoalss = () => {
     console.log('hi')
   }
-
-  // getGoalsWithID = () => {
-  //   return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
-  //   .then(response => response.json())
-  //   .then(data => this.setState({goals: data.filter(goal => goal.user.id === this.state.userID).map(data => {return {name: data.name, ID: data.id, calendar: data.calendars.map(calendar => calendar.date)} } )})
-  //   )   
-  // }
-
-
-
-     // getDatesWithID = () => {
-    //   return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
-    //   .then(response => response.json())
-    //   .then(data => this.setState({
-    //       datesWithID: data.map(data => data.id + ":" + data.date)
-    //     })
-    //   )   
-    // }
   
   login = user => {
     this.setState({ 
@@ -94,7 +70,10 @@ class App extends React.Component {
 
   logout = () => {
     API.logout()
-    this.setState({ user: false })
+    this.setState({ 
+      user: false,
+      userID: '',
+      goals: [] })
     this.props.history.push('/login')
   }
 
@@ -108,7 +87,7 @@ class App extends React.Component {
       <div className="App">
           <NavBar routes={routes} user={this.state.user}/>
         <Container>
-          <Route exact path="/" render={() => <Home user={this.state.user} userID={this.state.userID}/>} /> 
+          <Route exact path="/" render={() => <Home user={this.state.user} userID={this.state.userID} history={this.props.history} />} /> 
           <Route exact path="/login" render={() => <LoginForm  login={this.login}/>} /> 
           <Route exact path="/signup" render={() => <SignUpForm  signup={this.signup}/>} /> 
           <Route exact path="/logout" render={() => {this.logout()}} /> 
