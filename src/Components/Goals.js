@@ -453,11 +453,11 @@ class Goals extends React.Component {
     })
 
     return (
-      <div> {}
+
     <div> {this.state.goalDeleted ? null : <div className='calendar-container' style={this.style} >
 
     <div class="ui card">
-      <div class="content"><div class="header">{this.state.showChangeGoalInput ? <span onClick={() => this.setState({showGoalDetails: !this.state.showGoalDetails})}> {this.props.goalName }</span> : this.ChangeGoalName()} <button id='goalEdit' onClick={() => this.setState({showEditGoal: !this.state.showEditGoal})}>:::</button> {this.state.showEditGoal ? this.editGoal() : null}  </div></div>
+      <div class="content"><div class="header">{this.state.showChangeGoalInput ? <span onClick={() => this.setState({showGoalDetails: !this.state.showGoalDetails})}> {this.props.goalName }</span> : this.ChangeGoalName()}  </div></div>
 
       {this.state.showGoalDetails ? <div class="content">
         <div>
@@ -494,6 +494,10 @@ class Goals extends React.Component {
         <HorizontalBar data={this.data()} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1,  categoryPercentage : 1, precision: 1}]            }}} />
       </div>
       </div>
+      <button id='goalEdit' onClick={() => this.setState({showEditGoal: !this.state.showEditGoal})}>
+      :::
+     </button>
+      {this.state.showEditGoal ? this.editGoal() : null}
       </div>
     :
     null}
@@ -502,7 +506,6 @@ class Goals extends React.Component {
       
     </div>}
       
-      </div>
       </div>
 
     )
