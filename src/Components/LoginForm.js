@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form } from 'semantic-ui-react'
 import API from '../adapters/API'
+import './loginForm.css'
 
 class LoginForm extends React.Component {
   state = {
@@ -31,9 +32,11 @@ class LoginForm extends React.Component {
 
   render() {
     return (
+
       <Form
         onSubmit={this.submit}
         onChange={e => this.handleInputChange(e.target.name, e.target.value)}
+        className='Login'
       >
         <Form.Input required
           name="email"

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form } from 'semantic-ui-react'
 import API from '../adapters/API'
+import './signUpForm.css'
 
 class SignUpForm extends Component {
   state = {
@@ -26,6 +27,7 @@ class SignUpForm extends Component {
       <Form
         onSubmit={this.submit}
         onChange={e => this.handleInputChange(e.target.name, e.target.value)}
+        className='SignUpForm'
       >
         <Form.Input required
           name="email"

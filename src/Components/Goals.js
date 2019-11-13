@@ -490,9 +490,10 @@ class Goals extends React.Component {
         <HorizontalBar data={this.data()} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1,  categoryPercentage : 1, precision: 1}]            }}} />
       </div>
       </div>
-      <button id='goalEdit' onClick={() => this.setState({showEditGoal: !this.state.showEditGoal})}>
-      :::
-     </button>
+
+        <span id='goalEdit' onClick={() => this.setState({showEditGoal: !this.state.showEditGoal})}>: : :</span><br/><br/>
+
+
       {this.state.showEditGoal ? this.editGoal() : null}
       </div>
     :

@@ -2,6 +2,7 @@ import React from 'react'
 import { Segment, Header, Icon, Form } from 'semantic-ui-react'
 import API from '../adapters/API'
 import { routes } from '../config/routes'
+import './home.css'
 
 
 class Home extends React.Component {
@@ -33,19 +34,19 @@ class Home extends React.Component {
 
   render (){
   return (
-    <div>
-    <Segment textAlign="center">
-      <Header icon>
-        <h2>Welcome</h2>
-      </Header>
-      <br/><br/><br/>
-      {this.props.user === false ? "Login or Sign up" : this.CreateGoal()}
-      <br/><br/><br/>   
-      
-    </Segment>
 
-    
+      <div class="ui card" className='HomeCard'>
+      <Segment textAlign="center">
+        <Header icon>
+          <h2>Welcome</h2>
+        </Header>
+        <br/><br/><br/>
+        {this.props.user === false ? "Login or Sign up" : this.CreateGoal()}
+        <br/><br/><br/>   
+        
+      </Segment>
     </div>
+
   )
   }
 }
