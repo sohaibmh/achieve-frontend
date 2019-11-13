@@ -21,6 +21,7 @@ class LoginForm extends React.Component {
         throw Error(data.error)
       } else {
         this.props.login(data)
+        this.props.getGoals()
       }
     })
     .catch(error => {
@@ -34,14 +35,14 @@ class LoginForm extends React.Component {
         onSubmit={this.submit}
         onChange={e => this.handleInputChange(e.target.name, e.target.value)}
       >
-        <Form.Input
+        <Form.Input required
           name="email"
           type="email"
           placeholder="email"
           autocomplete="email"
           value={this.state.email}
         />
-        <Form.Input
+        <Form.Input required
           name="password"
           type="password"
           placeholder="password"

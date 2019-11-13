@@ -14,7 +14,7 @@ let LogIn = () => {
 
 const NavBar = (props) => {
   return (
-    <Menu sze='large' tabular onClick={() => console.log(props.x)}>
+    <Menu sze='large' tabular >
       <Menu.Item as={NavLink} to={'/'} exact activeClassName="active"><Button color='facebook'>Home</Button></Menu.Item>
       {props.user &&  <Menu.Item as={NavLink} to={'/goals'} exact activeClassName="active"><Button color='facebook'>Goals</Button></Menu.Item>}
       <Menu.Menu position='right'>

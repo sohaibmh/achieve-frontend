@@ -6,17 +6,6 @@ import './goals.css'
 import {HorizontalBar} from 'react-chartjs-2';
 
 
-
-// data: {
-//   datasets: [{
-//       barPercentage: 0.5,
-//       barThickness: 6,
-//       maxBarThickness: 8,
-//       minBarLength: 2,
-//       data: [10, 20, 30, 40, 50, 60, 70]
-//   }]
-// };
-
 class Goals extends React.Component {
 
   constructor(props) {
@@ -42,7 +31,7 @@ class Goals extends React.Component {
     datesWithoutStatus: [],
     totalDaysMarked: 0,
     totalGreens: 0,
-    totalGreensPercentate: 0,
+    // totalGreensPercentate: 0,
     showGoalDetails: false,
     datesFromServerTesting: [],
     showChangeGoalInput: true,
@@ -59,25 +48,8 @@ class Goals extends React.Component {
 
   totalGreensPercentate = () => {
     let percentage = (this.state.totalGreens * 100) / this.state.totalDaysMarked
-    this.setState({ totalGreensPercentate: percentage })
+    // this.setState({ totalGreensPercentate: percentage })
   }
-
-
-
-
-  // countryOptions = [
-  //   { key: 'af', value: 'af', text: 'Afghanistan' },
-  //   { key: 'ax', value: 'ax', text: 'Aland Islands' },
-  //   { key: 'al', value: 'al', text: 'Albania' },
-  // ]
-  
-  
-
-  // submit = e => {
-  //   e.preventDefault()
-  //   API.postPost({ title: this.state.title, content: this.state.content })
-  //   .then(post => this.props.history.push('/posts/' + post.id))
-  // }
 
                     postEventOnClick = event => {
                       event.preventDefault()
@@ -90,23 +62,27 @@ class Goals extends React.Component {
                       })
 
                       if (!this.state.datesFromServer.includes(event.target.value)) {
-                        API.postCalendar(objToAdd) /*.then(date => this.setState({datesWithID: date.goal.calendars.map(x => x.id + ":" + x.date) })) /* post and get */
+                        API.postCalendar(objToAdd)                      
+                        .then(() => this.props.getGoals()).then(() => this.componentWillMount()).then(() => this.componentDidMount())
+                         /*.then(date => this.setState({datesWithID: date.goal.calendars.map(x => x.id + ":" + x.date) })) /* post and get */
                         this.setState({
                           colours: [...this.state.colours, event.target.value],
                         })
                       }
 
                       if (this.state.datesWithoutStatus.includes(   this.state.selectedDay + this.month() + this.year()   )){
-                        API.updateCalendar(this.dateID(), objToUpdate)
+                        API.updateCalendar(this.dateID(), objToUpdate).then(() => this.props.getGoals())
+
                       }
                       
                       this.setState({
                         datesFromServer: this.props.goalCalendar,
                         datesWithID: this.props.goalDatesWithID,
                       })
-                    }
+                      // .then(() => this.props.getGoals())
+                      this.props.getGoals()
 
-                    
+                    }
 
   weekDays = moment.weekdays()
   weekDaysShort= moment.weekdaysShort()
@@ -260,8 +236,9 @@ class Goals extends React.Component {
       this.setState({showChangeGoalInput: !this.state.showChangeGoalInput})
     }
     else if (e.target.value == 'delete') {
-      API.deleteGoal(this.props.goalID)
+      API.deleteGoal(this.props.goalID).then(() => this.props.getGoals())
       this.setState({goalDeleted: !this.state.goalDeleted})
+      
     }
   }
 
@@ -303,70 +280,6 @@ class Goals extends React.Component {
     })
   }
   
-  // postEventOnClick = (event) => {
-  //   event.preventDefault()
-    
-  //   let objToAdd = event.target.value
-  
-  //   this.setState({
-  //     colours: [...this.state.colours, objToAdd]
-  //   })
-  
-  //   this.postCalendar(objToAdd)
-  // }
-  
-    // getDates = () => {
-    //   return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
-    //   .then(response => response.json())
-    //   .then(data => this.setState({
-    //       datesFromServer: data.map(data => data.date)
-    //     })
-    //   )   
-    // }
-
-
-    // getDates = () => {
-    //   return fetch(`http://localhost:3000/api/v1/users`, {method: "GET"})
-    //   .then(response => response.json())
-    //   .then(data =>  data.filter(user => user.id === this.props.userID).map(data => this.setState({datesFromServer: data.calendars.map(data => data.date) }) )
-        
-    //   )   
-    // }
-
-    // getDatesG = () => {
-    //   return fetch(`http://localhost:3000/api/v1/goals`, {method: "GET"})
-    //   .then(response => response.json())
-    //   .then(data =>  data.filter(goal => goal.id === this.props.userID).map(data => this.setState({title: data}) )
-    //   )   
-    // }
-
-    // user.id === this.props.userID).map(data => data.calendars.map(data => data.date))
-  
-    // getDatesWithID = () => {
-    //   return fetch(`http://localhost:3000/api/v1/calendars`, {method: "GET"})
-    //   .then(response => response.json())
-    //   .then(data => this.setState({
-    //       datesWithID: data.map(data => data.id + ":" + data.date)
-    //     })
-    //   )   
-    // }
-  
-  // postCalendar = (objToAdd) => {   
-  
-  //   let data = {
-  //     user_id: 1,
-  //     date: objToAdd
-  //   }
-  
-  //   fetch('http://localhost:3000/api/v1/calendars', {
-  //   method: "POST",
-  //   headers: {"Content-Type": "application/json", Accept: "application/json"},
-  //   body: JSON.stringify(data)
-  //   }).then(response => response.json())
-      
-  // }
-  
-  
   Colours = () => {
     return (
       <form id='statusForm' onClick={() => this.dateID()}>
@@ -386,30 +299,22 @@ class Goals extends React.Component {
 
   
   componentDidMount() {
-    // this.getDates()
-    // this.getDatesWithID()
-
-    // this.setState({datesFromServer: this.props.goalCalendar})
     this.setState({
       totalDaysMarked: this.state.datesFromServer.length,
       totalGreens: this.state.datesFromServer.filter(date => {return date.match(/green/)}).length,
       datesWithoutStatus: this.state.datesFromServer.map(date => date.split("-")).flat().filter((x, i) => i % 2 == 0)
-    })
-    this.totalGreensPercentate()
+      }
+    )
   }
 
   dateID = () => {
     let id = []
     id.push(this.state.datesWithID.filter(date => {return date.match(   this.state.selectedDay + this.month() + this.year()   )}).map(date => date.split(":")).flat())
-    // return id[0][0]
-    console.log(id[0][0])
+    return id[0][0]
+    // console.log(id[0][0])
   }
   
   componentWillMount() {
-    // this.getDates() 
-    // this.getDatesWithID()
-  
-
     this.setState({
       datesFromServer: this.props.goalCalendar,
       datesWithID: this.props.goalDatesWithID
@@ -417,12 +322,12 @@ class Goals extends React.Component {
 
     this.totalGreensPercentate()
     this.data()
-    // this.setState({totalDaysMarked: this.state.datesFromServer.length})
   }
+
 
   data = () => {
 
-    let dataPercentage = (this.state.totalGreens * 100) / this.state.totalDaysMarked
+    let dataPercentage = Math.round((this.state.totalGreens * 100) / this.state.totalDaysMarked)
     let backgroundColor = ''
     let borderColor = ''
 
@@ -461,14 +366,6 @@ class Goals extends React.Component {
 
 
   render() {
-
-
-
-
-
-
-
- 
 
   let  data = 
 
@@ -521,7 +418,6 @@ class Goals extends React.Component {
 
       // <li>{attraction.split(':')[1]}<button onClick={() => this.props.destroy(attraction.split(':')[0])} >Delete</button></li>
 
-
       }
       daysInMonth.push(
       <td key={d} className={className + selectedClass()}>
@@ -556,31 +452,8 @@ class Goals extends React.Component {
       )
     })
 
- 
-
-    // const datad = (canvas) => {
-    //   const ctx = canvas.getContext("2d")
-    //   const gradient = ctx.createLinearGradient(0,0,100,0);
-      
-
-    //   return {
-
-    //     backgroundColor: gradient,
-    //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    //     datasets: [{
-    //         label: 'My First dataset',
-    //         display: false,
-    //         backgroundColor: 'rgb(255, 99, 132)',
-    //         borderColor: 'rgb(255, 99, 132)',
-    //         data: [0, 10, 5, 2, 20, 30, 45],
-    //     }]
-
-    //   }
-    // }
-
-
     return (
-      
+      <div> {}
     <div> {this.state.goalDeleted ? null : <div className='calendar-container' style={this.style} >
 
     <div class="ui card">
@@ -618,7 +491,7 @@ class Goals extends React.Component {
       <div class="extra content">
         <i aria-hidden="true"></i>
         <div id={'horizontalBar'}>
-        <HorizontalBar data={this.data()} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1, categoryPercentage : 1}]}}} />
+        <HorizontalBar data={this.data()} options={{legend: {display: false}, maintainAspectRatio: false, scales : {yAxes : [{barPercentage : 1,  categoryPercentage : 1, precision: 1}]            }}} />
       </div>
       </div>
       </div>
@@ -629,6 +502,7 @@ class Goals extends React.Component {
       
     </div>}
       
+      </div>
       </div>
 
     )

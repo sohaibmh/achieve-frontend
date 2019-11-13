@@ -44,7 +44,6 @@ const handleServerResponse = res => {
 }
 
 const getPosts = () => fetch(POSTS_URL).then(handleServerResponse)
-// const getPost = id => fetch(`${POSTS_URL}/${id}`).then(handleServerResponse)
 
 const login = userDetails =>
   fetch(LOGIN_URL, {

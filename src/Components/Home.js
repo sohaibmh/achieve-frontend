@@ -15,7 +15,8 @@ class Home extends React.Component {
       name: this.state.goal
     }
     API.postGoal(objToAdd)
-    this.props.history.push('/goals')
+    .then(() => this.props.getGoals())
+    .then(() => this.props.history.push('/goals'))
   }
   
   CreateGoal = () => {

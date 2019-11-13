@@ -27,13 +27,13 @@ class SignUpForm extends Component {
         onSubmit={this.submit}
         onChange={e => this.handleInputChange(e.target.name, e.target.value)}
       >
-        <Form.Input
+        <Form.Input required
           name="email"
           type="email"
           placeholder="email"
           value={this.state.email}
         />
-        <Form.Input
+        <Form.Input required
           name="password"
           type="password"
           placeholder="password"
