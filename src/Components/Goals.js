@@ -36,7 +36,6 @@ class Goals extends React.Component {
     datesFromServerTesting: [],
     showChangeGoalInput: true,
     showEditGoal: false,
-    goalDeleted: false,
   }
 
 
@@ -71,8 +70,7 @@ class Goals extends React.Component {
                       }
 
                       if (this.state.datesWithoutStatus.includes(   this.state.selectedDay + this.month() + this.year()   )){
-                        API.updateCalendar(this.dateID(), objToUpdate).then(() => this.props.getGoals())
-
+                        API.updateCalendar(this.dateID(), objToUpdate)
                       }
                       
                       this.setState({
@@ -80,7 +78,7 @@ class Goals extends React.Component {
                         datesWithID: this.props.goalDatesWithID,
                       })
                       // .then(() => this.props.getGoals())
-                      this.props.getGoals()
+                      // this.props.getGoals()
 
                     }
 
@@ -224,9 +222,9 @@ class Goals extends React.Component {
       name: this.refs.newGoalName.value
     }
 
-    API.updateGoal(this.props.goalID, objToUpdate)
+    API.updateGoal(this.props.goalID, objToUpdate).then(() => this.props.getGoals())
     this.setState({showChangeGoalInput: !this.state.showChangeGoalInput})
-    this.props.getGoals()
+    this.setState({showEditGoal: !this.state.showEditGoal})
   }
 
   editGoalHandler = e => {
@@ -237,9 +235,8 @@ class Goals extends React.Component {
     }
     else if (e.target.value == 'delete') {
       API.deleteGoal(this.props.goalID).then(() => this.props.getGoals())
-      this.setState({goalDeleted: !this.state.goalDeleted})
-      
     }
+    
   }
 
   editGoal = () => {
@@ -261,9 +258,8 @@ class Goals extends React.Component {
         <form onSubmit={this.changeGoalNameHandler}>
           <input 
           defaultValue={this.props.goalName} 
-          onChange={e => this.onYearChange(e)}
           onKeyPress={this.handleKeyPress}
-          placeholder="New goal name"
+          placeholder=""
           ref='newGoalName'
           />
         </form>
@@ -454,7 +450,7 @@ class Goals extends React.Component {
 
     return (
 
-    <div> {this.state.goalDeleted ? null : <div className='calendar-container' style={this.style} >
+    <div> <div className='calendar-container' style={this.style}>
 
     <div class="ui card">
       <div class="content"><div class="header">{this.state.showChangeGoalInput ? <span onClick={() => this.setState({showGoalDetails: !this.state.showGoalDetails})}> {this.props.goalName }</span> : this.ChangeGoalName()}  </div></div>
@@ -504,7 +500,7 @@ class Goals extends React.Component {
       
       </div>
       
-    </div>}
+    </div>
       
       </div>
 
