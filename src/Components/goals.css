@@ -8,8 +8,12 @@ tr {
 }
 
 .calendar-container {
-    border: 2px solid skyblue;
-    margin: 50px;
+    /* border: 2px solid skyblue; */
+    margin-left: 45px;
+    margin-bottom: 30px;
+    position: center;
+    background-position: center;
+    list-style-position: center;
 }
 
 .calendar {
@@ -20,7 +24,7 @@ tr {
 }
 
 .calendar-header {
-    border-bottom: 1px dashed skyblue;
+    border-bottom: grey;
     font-size: 1.6em;
 }
 
@@ -114,3 +118,19 @@ tr {
 .label-month {
     cursor: pointer;
 }
+
+#horizontalBar {
+  height: 75px;
+}
+
+#statusForm {
+  border: 2px solid gainsboro;
+  background-color: gainsboro;
+  align-self: center;
+  align-items: center
+}
+
+#goalEdit {
+ padding-left: 0px; 
+}
+

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form } from 'semantic-ui-react'
 import API from '../adapters/API'
+import './loginForm.css'
 
 class LoginForm extends React.Component {
   state = {
@@ -21,6 +22,7 @@ class LoginForm extends React.Component {
         throw Error(data.error)
       } else {
         this.props.login(data)
+        this.props.getGoals()
       }
     })
     .catch(error => {
@@ -30,25 +32,27 @@ class LoginForm extends React.Component {
 
   render() {
     return (
+
       <Form
         onSubmit={this.submit}
         onChange={e => this.handleInputChange(e.target.name, e.target.value)}
+        className='Login'
       >
-        <Form.Input
+        <Form.Input required
           name="email"
           type="email"
           placeholder="email"
           autocomplete="email"
           value={this.state.email}
         />
-        <Form.Input
+        <Form.Input required
           name="password"
           type="password"
           placeholder="password"
           autocomplete="password"
           value={this.state.password}
         />
-        <Form.Button>Submit</Form.Button>
+        <Form.Button basic color='blue'>Submit</Form.Button>
       </Form>
     )
   }

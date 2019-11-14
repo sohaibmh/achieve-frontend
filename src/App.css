@@ -1,5 +1,11 @@
 .App {
   text-align: center;
+  background-color: white;
+  width: 375px;
+  min-height: 650px;
+  height: auto;
+  margin-left: 500px;
+  margin-top: 70px
 }
 
 .App-logo {
@@ -19,4 +25,8 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+.Container {
+  /* padding: 10 */
 }

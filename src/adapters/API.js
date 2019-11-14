@@ -44,7 +44,6 @@ const handleServerResponse = res => {
 }
 
 const getPosts = () => fetch(POSTS_URL).then(handleServerResponse)
-// const getPost = id => fetch(`${POSTS_URL}/${id}`).then(handleServerResponse)
 
 const login = userDetails =>
   fetch(LOGIN_URL, {
@@ -61,30 +60,13 @@ const login = userDetails =>
     })
     .catch(handleError)
 
-
-
-                      const signup = userDetails =>
-                        fetch(SIGNUP_URL, {
-                          method: 'POST',
-                          headers: jsonHeaders(),
-                          body: JSON.stringify({ user: userDetails })
-                        })
-                          .then(response => response.json())
-
-
-                    // postCalendar = (objToAdd) => {   
-                  
-                    //   let data = {
-                    //     date: objToAdd
-                    //   }
-                    
-                    //   fetch('http://localhost:3000/calendars', {
-                    //   method: "POST",
-                    //   headers: {"Content-Type": "application/json", Accept: "application/json"},
-                    //   body: JSON.stringify(data)
-                    //   }).then(response => response.json())
-                        
-                    // }   
+  const signup = userDetails =>
+    fetch(SIGNUP_URL, {
+      method: 'POST',
+      headers: jsonHeaders(),
+      body: JSON.stringify({ user: userDetails })
+    })
+      .then(response => response.json())
 
 const validateUser = () =>
   fetch(VALIDATE_URL, {
@@ -112,6 +94,22 @@ const validateUser = () =>
     .then(handleServerResponse)
     .catch(handleError)
 
+const updateGoal = (id, goal) =>
+fetch(`${GOALS_URL}/${id}`, {
+  method: 'PATCH',
+  headers: jsonHeaders(authHeader()),
+  body: JSON.stringify(goal)
+})
+  .then(handleServerResponse)
+  .catch(handleError)
+
+const deleteGoal = id =>
+fetch(`${GOALS_URL}/${id}`, {
+method: 'DELETE',
+})
+.then(handleServerResponse)
+.catch(handleError)
+
 const postCalendar = date =>
   fetch(POSTS_URL, {
     method: 'POST',
@@ -121,6 +119,15 @@ const postCalendar = date =>
     .then(handleServerResponse)
     .catch(handleError)
 
+const updateCalendar = (id, date) =>
+fetch(`${POSTS_URL}/${id}`, {
+  method: 'PATCH',
+  headers: jsonHeaders(authHeader()),
+  body: JSON.stringify(date)
+})
+  .then(handleServerResponse)
+  .catch(handleError)
+
 const logout = () => {
   localStorage.removeItem('token')
 }
@@ -129,7 +136,10 @@ export default {
   login,
   validateUser,
   postCalendar,
+  updateCalendar,
   postGoal,
+  deleteGoal,
+  updateGoal,
   logout,
   signup
 }
