@@ -39,6 +39,10 @@ class App extends React.Component {
          })
       }
     })
+   
+  }
+
+  componentWillMount() {
     this.getGoals()
   }
 

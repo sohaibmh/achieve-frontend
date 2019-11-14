@@ -39,6 +39,30 @@ class Goals extends React.Component {
   }
 
 
+  initialstate = () => {
+    return {
+      dateContext: moment(),
+      today: moment(),
+      showMonthPopup: false,
+      showYearPopup: false,
+      selectedDay: null,
+      counter: 0,
+      greens: [],
+      reds: [],
+      colours: [],
+      showColours: false,
+      datesFromServer: [],
+      datesWithID: [],
+      datesWithoutStatus: [],
+      totalDaysMarked: 0,
+      totalGreens: 0,
+      // totalGreensPercentate: 0,
+      showGoalDetails: false,
+      datesFromServerTesting: [],
+      showChangeGoalInput: true,
+      showEditGoal: false,
+    }
+  }
   handleInputChange = (key, value) => {
     this.setState({
       [key]: value
@@ -234,10 +258,11 @@ class Goals extends React.Component {
       this.setState({showChangeGoalInput: !this.state.showChangeGoalInput})
     }
     else if (e.target.value == 'delete') {
-      API.deleteGoal(this.props.goalID).then(() => this.props.getGoals())
+      API.deleteGoal(this.props.goalID).then(() => this.props.getGoals()).then(() => this.componentWillMount())
     }
-    
+    this.setState({showGoalDetails: false})
   }
+
 
   editGoal = () => {
     return (
