@@ -37,29 +37,6 @@ class Goals extends React.Component {
     showEditGoal: false,
   }
 
-  initialstate = () => {
-    return {
-      dateContext: moment(),
-      today: moment(),
-      showMonthPopup: false,
-      showYearPopup: false,
-      selectedDay: null,
-      counter: 0,
-      greens: [],
-      reds: [],
-      colours: [],
-      showColours: false,
-      datesFromServer: [],
-      datesWithID: [],
-      datesWithoutStatus: [],
-      totalDaysMarked: 0,
-      totalGreens: 0,
-      showGoalDetails: false,
-      datesFromServerTesting: [],
-      showChangeGoalInput: true,
-      showEditGoal: false,
-    }
-  }
   handleInputChange = (key, value) => {
     this.setState({
       [key]: value
