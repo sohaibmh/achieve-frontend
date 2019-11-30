@@ -79,8 +79,8 @@ class App extends React.Component {
   onDayClick = (e, day) => {
   alert(day)
   }
-
-
+  
+  
   render() {
     return (
 
