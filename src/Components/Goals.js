@@ -31,13 +31,11 @@ class Goals extends React.Component {
     datesWithoutStatus: [],
     totalDaysMarked: 0,
     totalGreens: 0,
-    // totalGreensPercentate: 0,
     showGoalDetails: false,
     datesFromServerTesting: [],
     showChangeGoalInput: true,
     showEditGoal: false,
   }
-
 
   initialstate = () => {
     return {
@@ -56,7 +54,6 @@ class Goals extends React.Component {
       datesWithoutStatus: [],
       totalDaysMarked: 0,
       totalGreens: 0,
-      // totalGreensPercentate: 0,
       showGoalDetails: false,
       datesFromServerTesting: [],
       showChangeGoalInput: true,
@@ -74,37 +71,37 @@ class Goals extends React.Component {
     // this.setState({ totalGreensPercentate: percentage })
   }
 
-                    postEventOnClick = event => {
-                      event.preventDefault()
+  postEventOnClick = event => {
+    event.preventDefault()
 
-                      let objToAdd = {date: event.target.value, goal_id: this.props.goalID}
-                      let objToUpdate = {date: event.target.value, goal_id: this.props.goalID}
+    let objToAdd = {date: event.target.value, goal_id: this.props.goalID}
+    let objToUpdate = {date: event.target.value, goal_id: this.props.goalID}
 
-                      this.setState({
-                        showColours: !this.state.showColours
-                      })
+    this.setState({
+      showColours: !this.state.showColours
+    })
 
-                      if (!this.state.datesFromServer.includes(event.target.value)) {
-                        API.postCalendar(objToAdd)                      
-                        .then(() => this.props.getGoals()).then(() => this.componentWillMount()).then(() => this.componentDidMount())
-                         /*.then(date => this.setState({datesWithID: date.goal.calendars.map(x => x.id + ":" + x.date) })) /* post and get */
-                        this.setState({
-                          colours: [...this.state.colours, event.target.value],
-                        })
-                      }
+    if (!this.state.datesFromServer.includes(event.target.value)) {
+      API.postCalendar(objToAdd)                      
+      .then(() => this.props.getGoals()).then(() => this.componentWillMount()).then(() => this.componentDidMount())
+        /*.then(date => this.setState({datesWithID: date.goal.calendars.map(x => x.id + ":" + x.date) })) /* post and get */
+      this.setState({
+        colours: [...this.state.colours, event.target.value],
+      })
+    }
 
-                      if (this.state.datesWithoutStatus.includes(   this.state.selectedDay + this.month() + this.year()   )){
-                        API.updateCalendar(this.dateID(), objToUpdate)
-                      }
-                      
-                      this.setState({
-                        datesFromServer: this.props.goalCalendar,
-                        datesWithID: this.props.goalDatesWithID,
-                      })
-                      // .then(() => this.props.getGoals())
-                      // this.props.getGoals()
+    if (this.state.datesWithoutStatus.includes(   this.state.selectedDay + this.month() + this.year()   )){
+      API.updateCalendar(this.dateID(), objToUpdate)
+    }
+    
+    this.setState({
+      datesFromServer: this.props.goalCalendar,
+      datesWithID: this.props.goalDatesWithID,
+    })
+    // .then(() => this.props.getGoals())
+    // this.props.getGoals()
 
-                    }
+  }
 
   weekDays = moment.weekdays()
   weekDaysShort= moment.weekdaysShort()
