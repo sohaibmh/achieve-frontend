@@ -43,9 +43,10 @@ class Goals extends React.Component {
     })
   }
 
+
+
   totalGreensPercentate = () => {
     let percentage = (this.state.totalGreens * 100) / this.state.totalDaysMarked
-    // this.setState({ totalGreensPercentate: percentage })
   }
 
   postEventOnClick = event => {
@@ -75,9 +76,6 @@ class Goals extends React.Component {
       datesFromServer: this.props.goalCalendar,
       datesWithID: this.props.goalDatesWithID,
     })
-    // .then(() => this.props.getGoals())
-    // this.props.getGoals()
-
   }
 
   weekDays = moment.weekdays()
