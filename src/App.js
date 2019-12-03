@@ -79,11 +79,9 @@ class App extends React.Component {
   onDayClick = (e, day) => {
   alert(day)
   }
-  
-  
+   
   render() {
     return (
-
       <div className="App">
         <NavBar routes={routes} user={this.state.user}/>
         <Container className="Container">
@@ -94,8 +92,6 @@ class App extends React.Component {
           {this.state.goals.length === 0 ? <Route exact path="/goals" render={()=>  "You currently have no goals!"} /> :  this.state.goals.map(goal => <Route exact path="/goals" render={()=> <Goals getGoals={this.getGoals} goalID={goal.ID} goalName={goal.name} goalCalendar={goal.calendar} goalDatesWithID={goal.calendarWithID} width='302px' onDayClick={(e, day) => this.onDayClick(e, day)} userID={this.state.userID} />} />  )}
         </Container>
       </div>
-     
-
     )
   }
 }
