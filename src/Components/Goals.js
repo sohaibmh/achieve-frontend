@@ -378,7 +378,6 @@ class Goals extends React.Component {
       blanks.push(<td key={i * 27} className='emptySlot'>{""}</td>)
     }
 
-
     let daysInMonth = []
     for (let d = 1; d <= this.daysInMonth(); d ++ ) {
       let className = (d == this.currentDay() ? "day current-day" : "day")
