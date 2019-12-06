@@ -10,8 +10,6 @@ import Home from './components/Home';
 import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
 
-
-
 const notFoundMessage = () => <Message negative>NOT FOUND</Message>
 
 const style = {
