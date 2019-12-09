@@ -8,13 +8,6 @@ import {HorizontalBar} from 'react-chartjs-2';
 
 class Goals extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.width = props.width || "350px";
-    this.style = props.style || {};
-    this.style.width = this.width;
-  }
-
   state = { 
     dateContext: moment(),
     today: moment(),
