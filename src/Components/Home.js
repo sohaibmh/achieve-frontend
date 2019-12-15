@@ -43,12 +43,9 @@ class Home extends React.Component {
         <br/><br/><br/>
         {this.props.user === false ? "Login or Sign up" : this.CreateGoal()}
         <br/><br/><br/>   
-        
       </Segment>
     </div>
-
-  )
-  }
+  )}
 }
 
 export default Home

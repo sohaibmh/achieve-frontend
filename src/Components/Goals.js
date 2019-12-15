@@ -8,13 +8,6 @@ import {HorizontalBar} from 'react-chartjs-2';
 
 class Goals extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.width = props.width || "350px";
-    this.style = props.style || {};
-    this.style.width = this.width;
-  }
-
   state = { 
     dateContext: moment(),
     today: moment(),
@@ -42,8 +35,6 @@ class Goals extends React.Component {
       [key]: value
     })
   }
-
-
 
   totalGreensPercentate = () => {
     let percentage = (this.state.totalGreens * 100) / this.state.totalDaysMarked
@@ -82,7 +73,6 @@ class Goals extends React.Component {
   weekDaysShort= moment.weekdaysShort()
   months = moment.months()
     
-  
   year = () => this.state.dateContext.format('Y')
   
   month = () => this.state.dateContext.format('MMMM')
@@ -212,7 +202,6 @@ class Goals extends React.Component {
   }
 
   changeGoalNameHandler = (e) => {
-    // e.preventDefault()
     let objToUpdate = {
       user_id: this.props.userID,
       name: this.refs.newGoalName.value
@@ -234,7 +223,6 @@ class Goals extends React.Component {
     }
     this.setState({showGoalDetails: false})
   }
-
 
   editGoal = () => {
     return (
@@ -289,8 +277,6 @@ class Goals extends React.Component {
     )
   }
 
-
-  
   componentDidMount() {
     this.setState({
       totalDaysMarked: this.state.datesFromServer.length,
@@ -304,7 +290,6 @@ class Goals extends React.Component {
     let id = []
     id.push(this.state.datesWithID.filter(date => {return date.match(   this.state.selectedDay + this.month() + this.year()   )}).map(date => date.split(":")).flat())
     return id[0][0]
-    // console.log(id[0][0])
   }
   
   componentWillMount() {
@@ -316,7 +301,6 @@ class Goals extends React.Component {
     this.totalGreensPercentate()
     this.data()
   }
-
 
   data = () => {
 
@@ -356,8 +340,6 @@ class Goals extends React.Component {
     })
   }
 
-
-
   render() {
 
   let  data = 
@@ -388,7 +370,6 @@ class Goals extends React.Component {
     for (let i = 0; i < this.firstDayOfMonth(); i ++) {
       blanks.push(<td key={i * 27} className='emptySlot'>{""}</td>)
     }
-
 
     let daysInMonth = []
     for (let d = 1; d <= this.daysInMonth(); d ++ ) {
@@ -489,7 +470,6 @@ class Goals extends React.Component {
       </div>
 
         <span id='goalEdit' onClick={() => this.setState({showEditGoal: !this.state.showEditGoal})}>: : :</span><br/><br/>
-
 
       {this.state.showEditGoal ? this.editGoal() : null}
       </div>
