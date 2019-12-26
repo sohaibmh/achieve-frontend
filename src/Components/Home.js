@@ -35,7 +35,7 @@ class Home extends React.Component {
   render (){
   return (
 
-      <div class="ui card" className='HomeCard'>
+    <div class="ui card" className='HomeCard'>
       <Segment textAlign="center">
         <Header icon>
           <h2>Welcome</h2>

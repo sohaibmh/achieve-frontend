@@ -40,7 +40,6 @@ export const routes = [
     path: '/logout',
     component: props => {
       props.logout()
-
       return null
     }
   }

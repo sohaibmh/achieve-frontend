@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-import { Button, Dropdown, Menu } from 'semantic-ui-react'
+import { Button, Menu } from 'semantic-ui-react'
 
 let LogIn = () => {
   return (
@@ -31,4 +31,5 @@ const NavBar = (props) => {
     </Menu>
   )
 }
+
 export default NavBar
