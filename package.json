@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "chart.js": "^2.9.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "^16.11.0",
     "react-calendar-component": "^3.0.0",
     "react-chartjs-2": "^2.8.0",
